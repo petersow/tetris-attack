@@ -2,9 +2,9 @@ package net.stickboyproductions.tetrisattack.processors;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import net.stickboyproductions.tetrisattack.constants.Directions;
+import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.model.Block;
-import net.stickboyproductions.tetrisattack.model.BlockChain;
-import net.stickboyproductions.tetrisattack.model.Cell;
 import net.stickboyproductions.tetrisattack.model.Grid;
 
 import java.util.Set;
@@ -19,40 +19,53 @@ public class ChainBuilderProcess {
   public ChainBuilderProcess() {
   }
 
-  public BlockChain buildChain(Cell startCell, Grid grid) {
-    Set<Block> xChain = buildXChain(startCell, grid);
-    Set<Block> yChain = buildYChain(startCell, grid);
-    return new BlockChain(xChain, yChain);
-  }
+  public Set<Block> buildClearableChain(Block startBlock, Grid grid) {
+    Set<Block> result = Sets.newHashSet();
 
-  public Set<Block> buildXChain(Cell startCell, Grid grid) {
-    Set result = Sets.newHashSet();
-    result.addAll(buildChainForDirection(startCell, grid, Grid.LEFT));
-    result.addAll(buildChainForDirection(startCell, grid, Grid.RIGHT));
+    Set<Block> xChain = buildXChain(startBlock, grid);
+    if (xChain.size() >= 3) {
+      result.addAll(xChain);
+    }
+    Set<Block> yChain = buildYChain(startBlock, grid);
+    for (Block block : ImmutableSet.copyOf(yChain)) {
+      if (block.getY() == 0) {
+        yChain.remove(block);
+      }
+    }
+    if (yChain.size() >= 3) {
+      result.addAll(yChain);
+    }
     return result;
   }
 
-  public Set<Block> buildYChain(Cell startCell, Grid grid) {
-    Set result = Sets.newHashSet();
-    result.addAll(buildChainForDirection(startCell, grid, Grid.UP));
-    result.addAll(buildChainForDirection(startCell, grid, Grid.DOWN));
+  public Set<Block> buildXChain(Block startBlock, Grid grid) {
+    Set<Block> result = Sets.newHashSet();
+    result.addAll(buildChainForDirection(startBlock, grid, Directions.LEFT));
+    result.addAll(buildChainForDirection(startBlock, grid, Directions.RIGHT));
     return result;
   }
 
-  private Set<Block> buildChainForDirection(Cell startCell, Grid grid, int direction) {
-    if (startCell.getBlock() == null) {
+  public Set<Block> buildYChain(Block startBlock, Grid grid) {
+    Set<Block> result = Sets.newHashSet();
+    result.addAll(buildChainForDirection(startBlock, grid, Directions.UP));
+    result.addAll(buildChainForDirection(startBlock, grid, Directions.DOWN));
+    return result;
+  }
+
+  private Set<Block> buildChainForDirection(Block startBlock,
+                                            Grid grid, int direction) {
+    if (startBlock == null || startBlock.getShape() == null) {
       return ImmutableSet.of();
     }
 
     Set<Block> result = Sets.newHashSet();
-    result.add(startCell.getBlock());
-
-    Cell cell = grid.getCellToTheDirection(startCell, direction);
-    while (cell != null && cell.getBlock() != null &&
-      !cell.getBlock().isBusy() &&
-      cell.getBlock().sameBlockType(startCell.getBlock())) {
-      result.add(cell.getBlock());
-      cell = grid.getCellToTheDirection(cell, direction);
+    result.add(startBlock);
+    Block block = grid.getBlockToTheDirection(startBlock, direction);
+    while (block != null &&
+      BlockState.IDLE.equals(block.getBlockState()) &&
+      startBlock.getShape().equals(block.getShape())) {
+      result.add(block);
+      block = grid.getBlockToTheDirection(block, direction);
     }
     return ImmutableSet.copyOf(result);
   }

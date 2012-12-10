@@ -1,13 +1,13 @@
-package net.stickboyproductions.tetrisattack.model.nextattempt.actions;
+package net.stickboyproductions.tetrisattack.actions;
 
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
 import net.stickboyproductions.tetrisattack.model.Shape;
-import net.stickboyproductions.tetrisattack.model.nextattempt.NewBlock;
-import net.stickboyproductions.tetrisattack.model.nextattempt.enums.BlockState;
+import net.stickboyproductions.tetrisattack.model.Block;
+import net.stickboyproductions.tetrisattack.enums.BlockState;
 
-import static net.stickboyproductions.tetrisattack.config.ScreenConfig.CELL_WIDTH;
-import static net.stickboyproductions.tetrisattack.model.nextattempt.constants.SpeedConstants.SHAPE_SWAP_MS;
-import static net.stickboyproductions.tetrisattack.model.nextattempt.constants.SpeedConstants.SHAPE_SWAP_STEP_MS;
+import static net.stickboyproductions.tetrisattack.constants.ScreenConfig.CELL_WIDTH;
+import static net.stickboyproductions.tetrisattack.constants.SpeedConstants.SHAPE_SWAP_MS;
+import static net.stickboyproductions.tetrisattack.constants.SpeedConstants.SHAPE_SWAP_STEP_MS;
 
 /**
  * User: Pete
@@ -18,11 +18,11 @@ public class ShapeSwap implements TimeTickingAction {
 
   private final static int OFFSET_STEP = CELL_WIDTH / 3;
 
-  private final NewBlock leftBlock;
-  private final NewBlock rightBlock;
+  private final Block leftBlock;
+  private final Block rightBlock;
   private int nextStep = SHAPE_SWAP_STEP_MS;
 
-  public ShapeSwap(NewBlock leftBlock, NewBlock rightBlock) {
+  public ShapeSwap(Block leftBlock, Block rightBlock) {
     this.leftBlock = leftBlock;
     this.rightBlock = rightBlock;
   }

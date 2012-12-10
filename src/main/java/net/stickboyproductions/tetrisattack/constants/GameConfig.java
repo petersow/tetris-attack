@@ -1,4 +1,4 @@
-package net.stickboyproductions.tetrisattack.config;
+package net.stickboyproductions.tetrisattack.constants;
 
 /**
  * User: Pete

@@ -1,10 +1,10 @@
-package net.stickboyproductions.tetrisattack.model.nextattempt.actions;
+package net.stickboyproductions.tetrisattack.actions;
 
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
-import net.stickboyproductions.tetrisattack.model.nextattempt.NewBlock;
-import net.stickboyproductions.tetrisattack.model.nextattempt.enums.BlockState;
+import net.stickboyproductions.tetrisattack.model.Block;
+import net.stickboyproductions.tetrisattack.enums.BlockState;
 
-import static net.stickboyproductions.tetrisattack.model.nextattempt.constants.SpeedConstants.*;
+import static net.stickboyproductions.tetrisattack.constants.SpeedConstants.*;
 
 /**
  * User: Pete
@@ -13,12 +13,12 @@ import static net.stickboyproductions.tetrisattack.model.nextattempt.constants.S
  */
 public class BlockDestroy implements TimeTickingAction {
 
-  private NewBlock block;
+  private Block block;
   private int distanceFromOrigin;
 
   private int nextFlash = BLOCK_DESTROY_FLASH_MS;
 
-  public BlockDestroy(NewBlock block, int distanceFromOrigin) {
+  public BlockDestroy(Block block, int distanceFromOrigin) {
     this.block = block;
     this.distanceFromOrigin = distanceFromOrigin;
   }

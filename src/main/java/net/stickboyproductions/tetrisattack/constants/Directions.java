@@ -1,11 +1,11 @@
-package net.stickboyproductions.tetrisattack.model.nextattempt.enums;
+package net.stickboyproductions.tetrisattack.constants;
 
 /**
  * User: Pete
  * Date: 27/11/12
  * Time: 22:48
  */
-public class Direction {
+public class Directions {
   public static final int LEFT = 1;
   public static final int RIGHT = 2;
   public static final int UP = 3;

@@ -1,8 +1,8 @@
 package net.stickboyproductions.tetrisattack;
 
 import net.stickboyproductions.tetrisattack.io.InputNotifier;
+import net.stickboyproductions.tetrisattack.model.Game;
 import net.stickboyproductions.tetrisattack.model.Grid;
-import net.stickboyproductions.tetrisattack.model.nextattempt.Game;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
 import net.stickboyproductions.tetrisattack.ui.Screen;
 import net.stickboyproductions.tetrisattack.ui.TextureStore;

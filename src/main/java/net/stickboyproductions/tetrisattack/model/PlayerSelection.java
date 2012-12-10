@@ -1,6 +1,7 @@
 package net.stickboyproductions.tetrisattack.model;
 
 import net.stickboyproductions.tetrisattack.Clock;
+import net.stickboyproductions.tetrisattack.constants.Directions;
 import net.stickboyproductions.tetrisattack.interfaces.Drawable;
 import net.stickboyproductions.tetrisattack.interfaces.TimeDelayedAction;
 import net.stickboyproductions.tetrisattack.io.InputNotifier;
@@ -20,19 +21,19 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
   Clock clock;
 
   private Grid grid;
-  private Cell leftCell;
-  private Cell rightCell;
+  private Block leftBlock;
+  private Block rightBlock;
   private DrawableRegister drawableRegister;
 
   double frame = 0.0;
 
   public PlayerSelection(Clock clock, Grid grid,
-                         Cell leftCell, Cell rightCell,
+                         Block leftBlock,
                          DrawableRegister drawableRegister, InputNotifier inputNotifier) {
     this.clock = clock;
     this.grid = grid;
-    this.leftCell = leftCell;
-    this.rightCell = rightCell;
+    this.leftBlock = leftBlock;
+    this.rightBlock = grid.getBlockToTheDirection(leftBlock, Directions.RIGHT);
 
     this.drawableRegister = drawableRegister;
 
@@ -43,48 +44,52 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   @Override
   public void moveRightPressed() {
-    Cell newRightCell = grid.getCellToTheRight(rightCell);
-    if (newRightCell != null) {
-      leftCell = rightCell;
-      rightCell = newRightCell;
+    Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.RIGHT);
+    if (newRightBlock != null) {
+      leftBlock = rightBlock;
+      rightBlock = newRightBlock;
     }
   }
 
   @Override
   public void moveLeftPressed() {
-    Cell newLeftCell = grid.getCellToTheLeft(leftCell);
-    if (newLeftCell != null) {
-      rightCell = leftCell;
-      leftCell = newLeftCell;
+    Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.LEFT);
+    if (newLeftBlock != null) {
+      rightBlock = leftBlock;
+      leftBlock = newLeftBlock;
     }
   }
 
   @Override
   public void moveUpPressed() {
-    Cell newLeftCell = grid.getCellAbove(leftCell);
-    Cell newRightCell = grid.getCellAbove(rightCell);
-    if (newRightCell != null && newLeftCell != null) {
-      leftCell = newLeftCell;
-      rightCell = newRightCell;
+    Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.UP);
+    Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.UP);
+    if (newRightBlock != null && newLeftBlock != null) {
+      leftBlock = newLeftBlock;
+      rightBlock = newRightBlock;
     }
   }
 
   @Override
   public void moveDownPressed() {
-    Cell newLeftCell = grid.getCellBelow(leftCell);
-    Cell newRightCell = grid.getCellBelow(rightCell);
-    if (newRightCell != null && newLeftCell != null) {
-      leftCell = newLeftCell;
-      rightCell = newRightCell;
+    Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.DOWN);
+    Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.DOWN);
+    if (newRightBlock != null && newLeftBlock != null && newRightBlock.getY() > 0) {
+      leftBlock = newLeftBlock;
+      rightBlock = newRightBlock;
     }
   }
 
   public int getLeftX() {
-    return leftCell.getX();
+    return leftBlock.getX();
+  }
+
+  public int getRightX() {
+    return rightBlock.getX();
   }
 
   public int getY() {
-    return leftCell.getY();
+    return leftBlock.getY();
   }
 
   @Override
@@ -99,7 +104,7 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   @Override
   public void draw(Screen screen) {
-    screen.drawSprite(leftCell.getQuad(), "selected", frame);
-    screen.drawSprite(rightCell.getQuad(), "selected", frame);
+    screen.drawSprite(leftBlock.getX(), leftBlock.getY(), "selected", frame);
+    screen.drawSprite(rightBlock.getX(), rightBlock.getY(), "selected", frame);
   }
 }

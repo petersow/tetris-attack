@@ -1,4 +1,4 @@
-package net.stickboyproductions.tetrisattack.model.nextattempt.constants;
+package net.stickboyproductions.tetrisattack.constants;
 
 /**
  * User: Pete
@@ -14,6 +14,6 @@ public class SpeedConstants {
   public static final int SHAPE_SWAP_STEP_MS = SHAPE_SWAP_MS / 3;
 
   public static final int BLOCK_DESTROY_FLASH_PHASE_MS = 700;
-  public static final int BLOCK_DESTROY_FLASH_MS = 30;
+  public static final int BLOCK_DESTROY_FLASH_MS = 50;
   public static final int BLOCK_DESTROY_CELL_MS = 115;
 }

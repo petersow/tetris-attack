@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static net.stickboyproductions.tetrisattack.config.ScreenConfig.SPRITE_SIZE;
+import static net.stickboyproductions.tetrisattack.constants.ScreenConfig.SPRITE_SIZE;
 
 /**
  * User: Pete

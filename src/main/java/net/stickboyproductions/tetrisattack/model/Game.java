@@ -1,24 +1,23 @@
-package net.stickboyproductions.tetrisattack.model.nextattempt;
+package net.stickboyproductions.tetrisattack.model;
 
 import com.google.common.collect.Lists;
 import net.stickboyproductions.tetrisattack.Clock;
-import net.stickboyproductions.tetrisattack.config.GameConfig;
+import net.stickboyproductions.tetrisattack.constants.GameConfig;
 import net.stickboyproductions.tetrisattack.io.InputNotifier;
-import net.stickboyproductions.tetrisattack.model.AbstractControllable;
-import net.stickboyproductions.tetrisattack.model.nextattempt.actions.BlockDestroy;
-import net.stickboyproductions.tetrisattack.model.nextattempt.actions.BlockFall;
-import net.stickboyproductions.tetrisattack.model.nextattempt.actions.ShapeSwap;
-import net.stickboyproductions.tetrisattack.model.nextattempt.enums.BlockState;
-import net.stickboyproductions.tetrisattack.model.nextattempt.generators.StartGridGenerator;
-import net.stickboyproductions.tetrisattack.model.nextattempt.processors.ChainBuilderProcess;
+import net.stickboyproductions.tetrisattack.actions.BlockDestroy;
+import net.stickboyproductions.tetrisattack.actions.BlockFall;
+import net.stickboyproductions.tetrisattack.actions.ShapeSwap;
+import net.stickboyproductions.tetrisattack.enums.BlockState;
+import net.stickboyproductions.tetrisattack.generators.StartGridGenerator;
+import net.stickboyproductions.tetrisattack.processors.ChainBuilderProcess;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 
-import static net.stickboyproductions.tetrisattack.config.GameConfig.BLOCKS_IN_ROW_COUNT;
-import static net.stickboyproductions.tetrisattack.config.GameConfig.ROWS_IN_GRID;
+import static net.stickboyproductions.tetrisattack.constants.GameConfig.BLOCKS_IN_ROW_COUNT;
+import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_GRID;
 
 /**
  * User: Pete
@@ -28,7 +27,7 @@ import static net.stickboyproductions.tetrisattack.config.GameConfig.ROWS_IN_GRI
 public class Game extends AbstractControllable {
 
   private DrawableRegister drawableRegister;
-  private NewGrid grid;
+  private Grid grid;
   private ChainBuilderProcess chainBuilderProcess;
   private StartGridGenerator startGridGenerator;
   private InputNotifier inputNotifier;
@@ -40,7 +39,7 @@ public class Game extends AbstractControllable {
 
   @Inject
   public Game(DrawableRegister drawableRegister, ChainBuilderProcess chainBuilderProcess,
-              StartGridGenerator startGridGenerator, InputNotifier inputNotifier, Clock clock, NewGrid grid) {
+              StartGridGenerator startGridGenerator, InputNotifier inputNotifier, Clock clock, Grid grid) {
     this.drawableRegister = drawableRegister;
     this.chainBuilderProcess = chainBuilderProcess;
     this.startGridGenerator = startGridGenerator;
@@ -112,7 +111,7 @@ public class Game extends AbstractControllable {
 
     for (int y = 0; y < ROWS_IN_GRID; y++) {
       for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
-        NewBlock currentBlock = grid.get(x, y);
+        Block currentBlock = grid.get(x, y);
         if (currentBlock.getBlockState().equals(BlockState.IDLE)) {
           if (currentBlock.canFall()) {
             System.out.println("I can fall! " + currentBlock.getX() + ", " + currentBlock.getY());
@@ -121,11 +120,11 @@ public class Game extends AbstractControllable {
           } else {
             if (y > 0) {
               // Build chain
-              Set<NewBlock> chain = chainBuilderProcess.buildClearableChain(currentBlock, grid);
+              Set<Block> chain = chainBuilderProcess.buildClearableChain(currentBlock, grid);
               if (chain.size() >= 3) {
                 System.out.println("Found a chain - " + chain.size() + " " + chain.iterator().next().getShape());
                 List<BlockDestroy> blockDestroyGroup = Lists.newArrayList();
-                for (NewBlock next : chain) {
+                for (Block next : chain) {
                   BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next));
                   blockDestroyGroup.add(newBlockDestroy);
                 }
@@ -144,8 +143,8 @@ public class Game extends AbstractControllable {
 
   @Override
   public void actionPressed() {
-    NewBlock leftBlock = grid.get(playerSelection.getLeftX(), playerSelection.getY());
-    NewBlock rightBlock = grid.get(playerSelection.getRightX(), playerSelection.getY());
+    Block leftBlock = grid.get(playerSelection.getLeftX(), playerSelection.getY());
+    Block rightBlock = grid.get(playerSelection.getRightX(), playerSelection.getY());
     if (leftBlock != null && rightBlock != null && leftBlock.canSwap() && rightBlock.canSwap()) {
       ShapeSwap shapeSwap = new ShapeSwap(leftBlock, rightBlock);
       clock.register(shapeSwap);

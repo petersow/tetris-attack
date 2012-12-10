@@ -1,4 +1,4 @@
-package net.stickboyproductions.tetrisattack.model.nextattempt.enums;
+package net.stickboyproductions.tetrisattack.enums;
 
 /**
  * User: Pete

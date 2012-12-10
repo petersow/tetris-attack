@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 import java.awt.*;
 import java.io.InputStream;
 
-import static net.stickboyproductions.tetrisattack.config.ScreenConfig.*;
+import static net.stickboyproductions.tetrisattack.constants.ScreenConfig.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /**

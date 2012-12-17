@@ -39,7 +39,7 @@ public class BlockFall implements TimeTickingAction {
       block.setBlockState(BlockState.FALLING);
       Block blockBelow = grid.getBlockToTheDirection(block, Directions.DOWN);
       System.out.println(blockBelow.getOffsetY());
-      if (blockBelow.getOffsetY() == 0 && !blockBelow.getBlockState().equals(BlockState.PAUSED_BEFORE_FALLING)) {
+      if (!blockBelow.getBlockState().equals(BlockState.PAUSED_BEFORE_FALLING)) {
         blockBelow.setShape(block.getShape());
 
         if (blockBelow.canFall()) {

@@ -16,4 +16,6 @@ public class SpeedConstants {
   public static final int BLOCK_DESTROY_FLASH_PHASE_MS = 700;
   public static final int BLOCK_DESTROY_FLASH_MS = 50;
   public static final int BLOCK_DESTROY_CELL_MS = 115;
+
+  public static final int GRID_MOVE_UP_OFFSET_MS = 1000;
 }

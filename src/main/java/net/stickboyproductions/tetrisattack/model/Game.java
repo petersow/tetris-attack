@@ -2,6 +2,7 @@ package net.stickboyproductions.tetrisattack.model;
 
 import com.google.common.collect.Lists;
 import net.stickboyproductions.tetrisattack.Clock;
+import net.stickboyproductions.tetrisattack.actions.GridMoveUp;
 import net.stickboyproductions.tetrisattack.constants.GameConfig;
 import net.stickboyproductions.tetrisattack.io.InputNotifier;
 import net.stickboyproductions.tetrisattack.actions.BlockDestroy;
@@ -32,6 +33,7 @@ public class Game extends AbstractControllable {
   private StartGridGenerator startGridGenerator;
   private InputNotifier inputNotifier;
   private Clock clock;
+  private GridMoveUp gridMoveUp;
 
   private PlayerSelection playerSelection;
 
@@ -62,6 +64,9 @@ public class Game extends AbstractControllable {
       drawableRegister, inputNotifier);
 
     inputNotifier.register(this);
+
+    this.gridMoveUp = new GridMoveUp(this, playerSelection);
+    clock.register(gridMoveUp);
 
     // TODO : Move to some load state ?
     // Test block fall
@@ -149,5 +154,42 @@ public class Game extends AbstractControllable {
       ShapeSwap shapeSwap = new ShapeSwap(leftBlock, rightBlock);
       clock.register(shapeSwap);
     }
+  }
+
+  @Override
+  public void spacePressed() {
+//    moveUp();
+    gridMoveUp.speedUp();
+  }
+
+  public void moveUp() {
+    // Stop old cells from being drawn
+    for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+      drawableRegister.unregister(grid.get(x, 11));
+    }
+    // Modify state
+    grid.moveAllUp();
+    playerSelection.moveUpPressed();
+
+    // Remove offset caused by slow move up
+    for (int y = 0; y < ROWS_IN_GRID; y++) {
+      for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+        Block block = grid.get(x, y);
+        block.setOffsetY(0);
+      }
+    }
+    playerSelection.resetOffsetY();
+
+    // Reset the counter on the move up action
+    gridMoveUp.reset();
+
+    // Make sure all new blocks are drawn
+    for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+      drawableRegister.register(grid.get(x, 0));
+    }
+  }
+
+  public Grid getGrid() {
+    return grid;
   }
 }

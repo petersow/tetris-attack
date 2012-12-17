@@ -116,8 +116,8 @@ public class Screen {
     drawSprite(quad, spriteName, framePosition, false);
   }
 
-  public void drawSprite(int x, int y, String spriteName, double framePosition) {
-    drawSprite(buildQuad(x, y, 0, 0), spriteName, framePosition, false);
+  public void drawSprite(int x, int y, String spriteName, int offsetX, int offsetY, double framePosition) {
+    drawSprite(buildQuad(x, y, offsetX, offsetY), spriteName, framePosition, false);
   }
 
   public void drawSprite(Quad quad, String spriteName, double framePosition, boolean dark) {

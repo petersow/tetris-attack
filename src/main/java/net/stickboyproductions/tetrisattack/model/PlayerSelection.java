@@ -25,6 +25,8 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
   private Block rightBlock;
   private DrawableRegister drawableRegister;
 
+  private int offsetY = 0;
+
   double frame = 0.0;
 
   public PlayerSelection(Clock clock, Grid grid,
@@ -102,9 +104,17 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
     clock.schedule(this, 500);
   }
 
+  public void incrementOffsetY(int incr) {
+    offsetY += incr;
+  }
+
+  public void resetOffsetY() {
+    offsetY = 0;
+  }
+
   @Override
   public void draw(Screen screen) {
-    screen.drawSprite(leftBlock.getX(), leftBlock.getY(), "selected", frame);
-    screen.drawSprite(rightBlock.getX(), rightBlock.getY(), "selected", frame);
+    screen.drawSprite(leftBlock.getX(), leftBlock.getY(), "selected", 0, offsetY, frame);
+    screen.drawSprite(rightBlock.getX(), rightBlock.getY(), "selected", 0, offsetY, frame);
   }
 }

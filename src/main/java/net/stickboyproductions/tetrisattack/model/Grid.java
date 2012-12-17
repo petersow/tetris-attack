@@ -1,5 +1,13 @@
 package net.stickboyproductions.tetrisattack.model;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMultiset;
+import net.stickboyproductions.tetrisattack.constants.Directions;
+import net.stickboyproductions.tetrisattack.enums.BlockState;
+import net.stickboyproductions.tetrisattack.generators.ShapeGenerator;
+
+import javax.inject.Inject;
+
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.BLOCKS_IN_ROW_COUNT;
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_GRID;
 import static net.stickboyproductions.tetrisattack.constants.Directions.*;
@@ -13,8 +21,11 @@ public class Grid {
 
   private Block[][] grid =
     new Block[BLOCKS_IN_ROW_COUNT][ROWS_IN_GRID];
+  private ShapeGenerator shapeGenerator;
 
-  public Grid() {
+  @Inject
+  public Grid(ShapeGenerator shapeGenerator) {
+    this.shapeGenerator = shapeGenerator;
   }
 
   public Block get(int x, int y) {
@@ -46,5 +57,40 @@ public class Grid {
         return get(block.getX(), block.getY() - 1);
     }
     return null;
+  }
+
+  public void moveAllUp() {
+
+    Block[][] newGrid =
+      new Block[BLOCKS_IN_ROW_COUNT][ROWS_IN_GRID];
+    for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+      Block newBlock = new Block(this, x, 0);
+      newBlock.setBlockState(BlockState.IDLE);
+      newBlock.setShape(shapeGenerator.get());
+      newGrid[x][0] = newBlock;
+    }
+
+    for (int y = ROWS_IN_GRID - 2; y >= 0; y--) {
+      System.out.println("Doing " + y);
+      for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+        System.out.println(x + " " + (y + 1));
+        newGrid[x][y + 1] = grid[x][y];
+        grid[x][y].setY(y + 1);
+//        get(x, y).setY(y + 1);
+//        System.out.println(y + " , " + x);
+//        Block block =
+//          Block blockBelow = getBlockToTheDirection(block, Directions.DOWN);
+//        block.setShape(blockBelow.getShape());
+//        block.setBlockState(blockBelow.getBlockState());
+      }
+    }
+
+//    for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+//      Block block = get(x, 0);
+//      block.setBlockState(BlockState.IDLE);
+//      block.setShape(shapeGenerator.get());
+//    }
+    grid = newGrid;
+    System.out.println(grid[0][0].getShape());
   }
 }

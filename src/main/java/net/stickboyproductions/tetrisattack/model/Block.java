@@ -67,6 +67,7 @@ public class Block implements Drawable {
 
   @Override
   public void draw(Screen screen) {
+    System.out.println(x + " " + y);
     if ((!BlockState.EMPTY.equals(blockState) && !BlockState.DESTROYING_END.equals(blockState))
       && shape != null) {
       screen.drawShape(x, y, offsetX + shapeOffsetX, offsetY, shape, frame, y == 0);
@@ -132,5 +133,9 @@ public class Block implements Drawable {
     }
 
     return xDistance + yDistance;
+  }
+
+  public void setY(int y) {
+    this.y = y;
   }
 }

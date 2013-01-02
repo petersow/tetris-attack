@@ -1,7 +1,6 @@
 package net.stickboyproductions.tetrisattack.model;
 
 import com.google.common.collect.Lists;
-import net.stickboyproductions.tetrisattack.Clock;
 import net.stickboyproductions.tetrisattack.actions.*;
 import net.stickboyproductions.tetrisattack.constants.GameConfig;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
@@ -10,8 +9,10 @@ import net.stickboyproductions.tetrisattack.generators.StartGridGenerator;
 import net.stickboyproductions.tetrisattack.interfaces.Drawable;
 import net.stickboyproductions.tetrisattack.io.InputNotifier;
 import net.stickboyproductions.tetrisattack.processors.ChainBuilderProcess;
+import net.stickboyproductions.tetrisattack.timing.GameClock;
+import net.stickboyproductions.tetrisattack.timing.SystemClock;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
-import net.stickboyproductions.tetrisattack.ui.GameClock;
+import net.stickboyproductions.tetrisattack.ui.GameClockPanel;
 import net.stickboyproductions.tetrisattack.ui.Screen;
 
 import javax.inject.Inject;
@@ -34,14 +35,15 @@ public class Game extends AbstractControllable implements Drawable {
   private DrawableRegister drawableRegister;
   private Grid grid;
   private ChainBuilderProcess chainBuilderProcess;
+  private SystemClock systemClock;
   private StartGridGenerator startGridGenerator;
   private InputNotifier inputNotifier;
-  private Clock clock;
+  private GameClock gameClock;
   private GridMoveUp gridMoveUp;
 
   // UI things
   private Score score;
-  private GameClock gameClock;
+  private GameClockPanel gameClockPanel;
 
   private GameState gameState = GameState.STARTING;
 
@@ -51,14 +53,15 @@ public class Game extends AbstractControllable implements Drawable {
 
   @Inject
   public Game(DrawableRegister drawableRegister, ChainBuilderProcess chainBuilderProcess,
-              StartGridGenerator startGridGenerator, InputNotifier inputNotifier, Clock clock, Grid grid) {
+              GameClock gameClock, SystemClock systemClock,
+              StartGridGenerator startGridGenerator, InputNotifier inputNotifier, Grid grid) {
     this.drawableRegister = drawableRegister;
     this.chainBuilderProcess = chainBuilderProcess;
+    this.systemClock = systemClock;
     this.startGridGenerator = startGridGenerator;
     this.inputNotifier = inputNotifier;
-    this.clock = clock;
-    clock.setGame(this);
     this.grid = grid;
+    this.gameClock = gameClock;
   }
 
   public void init() {
@@ -71,16 +74,16 @@ public class Game extends AbstractControllable implements Drawable {
 
     startGridGenerator.generate(grid);
 
-    playerSelection = new PlayerSelection(clock, grid, grid.get(GameConfig.PLAYER_START_X, GameConfig.PLAYER_START_Y),
+    playerSelection = new PlayerSelection(gameClock, grid, grid.get(GameConfig.PLAYER_START_X, GameConfig.PLAYER_START_Y),
       drawableRegister, inputNotifier);
 
     inputNotifier.register(this);
 
     GameStart gameStart = new GameStart(this, drawableRegister);
-    clock.register(gameStart);
+    systemClock.register(gameStart);
 
     score = new Score(drawableRegister);
-    gameClock = new GameClock(drawableRegister);
+    gameClockPanel = new GameClockPanel(drawableRegister, gameClock);
 
     drawableRegister.register(this);
 
@@ -120,13 +123,15 @@ public class Game extends AbstractControllable implements Drawable {
 
   public void startGame() {
     gameState = GameState.RUNNING;
+    gameClock.start();
 
     this.gridMoveUp = new GridMoveUp(this, playerSelection);
-    clock.register(gridMoveUp);
+    gameClock.register(gridMoveUp);
     playerSelection.enable();
   }
 
   public void update() {
+    gameClock.tick();
     if (gameState.equals(GameState.RUNNING)) {
       // Test block fall
 //    if(count >= 10) {
@@ -140,9 +145,8 @@ public class Game extends AbstractControllable implements Drawable {
           Block currentBlock = grid.get(x, y);
           if (currentBlock.getBlockState().equals(BlockState.IDLE)) {
             if (currentBlock.canFall()) {
-              System.out.println("I can fall! " + currentBlock.getX() + ", " + currentBlock.getY());
               BlockFall newBlockFall = new BlockFall(currentBlock, grid);
-              clock.register(newBlockFall);
+              gameClock.register(newBlockFall);
             } else {
               if (y > 0) {
                 // Build chain
@@ -159,7 +163,7 @@ public class Game extends AbstractControllable implements Drawable {
                     BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next), score);
                     blockDestroyGroup.add(newBlockDestroy);
                   }
-                  clock.register(blockDestroyGroup);
+                  gameClock.register(blockDestroyGroup);
                 }
               }
             }
@@ -180,7 +184,7 @@ public class Game extends AbstractControllable implements Drawable {
       Block rightBlock = grid.get(playerSelection.getRightX(), playerSelection.getY());
       if (leftBlock != null && rightBlock != null && leftBlock.canSwap() && rightBlock.canSwap()) {
         ShapeSwap shapeSwap = new ShapeSwap(leftBlock, rightBlock);
-        clock.register(shapeSwap);
+        gameClock.register(shapeSwap);
       }
     }
   }
@@ -188,20 +192,14 @@ public class Game extends AbstractControllable implements Drawable {
   @Override
   public void pausePressed() {
     if (gameState.equals(GameState.RUNNING)) {
-      gridMoveUp.pause();
+      gameClock.pause();
       playerSelection.disable();
       gameState = GameState.PAUSED;
     } else if (gameState.equals(GameState.PAUSED)) {
+      gameClock.resume();
       playerSelection.enable();
-      gridMoveUp.resume();
       gameState = GameState.RUNNING;
     }
-  }
-
-  @Override
-  public void pauseReleased() {
-    gridMoveUp.resume();
-    playerSelection.disable();
   }
 
   @Override
@@ -215,7 +213,6 @@ public class Game extends AbstractControllable implements Drawable {
   public void gameOver() {
     gameState = GameState.GAME_OVER;
     playerSelection.disable();
-    gridMoveUp.pause();
   }
 
   public void moveUp() {
@@ -269,7 +266,7 @@ public class Game extends AbstractControllable implements Drawable {
     }
   }
 
-  public GameClock getGameClock() {
-    return gameClock;
+  public GameClockPanel getGameClockPanel() {
+    return gameClockPanel;
   }
 }

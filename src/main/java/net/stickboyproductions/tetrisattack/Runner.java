@@ -3,6 +3,7 @@ package net.stickboyproductions.tetrisattack;
 import net.stickboyproductions.tetrisattack.io.InputNotifier;
 import net.stickboyproductions.tetrisattack.model.Game;
 import net.stickboyproductions.tetrisattack.model.Grid;
+import net.stickboyproductions.tetrisattack.timing.SystemClock;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
 import net.stickboyproductions.tetrisattack.ui.Screen;
 import net.stickboyproductions.tetrisattack.ui.TextureStore;
@@ -21,7 +22,7 @@ public class Runner {
   private InputNotifier inputNotifier;
   private Screen screen;
   private TextureStore textureStore;
-  private Clock clock;
+  private SystemClock clock;
   private DrawableRegister drawableRegister;
 
   private Grid grid;
@@ -30,7 +31,7 @@ public class Runner {
   @Inject
   public Runner(InputNotifier inputNotifier, Screen screen,
                 TextureStore textureStore,
-                Clock clock, DrawableRegister drawableRegister,
+                SystemClock clock, DrawableRegister drawableRegister,
                 Grid grid, Game game) {
     this.inputNotifier = inputNotifier;
     this.screen = screen;

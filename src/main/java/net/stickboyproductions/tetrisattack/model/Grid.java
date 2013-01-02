@@ -56,7 +56,6 @@ public class Grid {
   }
 
   public void moveAllUp() {
-
     Block[][] newGrid =
       new Block[BLOCKS_IN_ROW_COUNT][ROWS_IN_GRID];
     for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
@@ -70,20 +69,9 @@ public class Grid {
       for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
         newGrid[x][y + 1] = grid[x][y];
         grid[x][y].setY(y + 1);
-//        get(x, y).setY(y + 1);
-//        System.out.println(y + " , " + x);
-//        Block block =
-//          Block blockBelow = getBlockToTheDirection(block, Directions.DOWN);
-//        block.setShape(blockBelow.getShape());
-//        block.setBlockState(blockBelow.getBlockState());
       }
     }
 
-//    for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
-//      Block block = get(x, 0);
-//      block.setBlockState(BlockState.IDLE);
-//      block.setShape(shapeGenerator.get());
-//    }
     grid = newGrid;
   }
 }

@@ -1,4 +1,4 @@
-package net.stickboyproductions.tetrisattack;
+package net.stickboyproductions.tetrisattack.timing;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -7,7 +7,6 @@ import net.stickboyproductions.tetrisattack.interfaces.TimeDelayedAction;
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
 import net.stickboyproductions.tetrisattack.model.Game;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
@@ -16,17 +15,13 @@ import java.util.List;
  * Date: 29/10/12
  * Time: 21:10
  */
-@Singleton
-public class Clock {
+public abstract class AbstractClock {
 
   private final List<TimeDelayedActionEntry> delayedActions = Lists.newArrayList();
   private final List<TimeTickingActionEntry> tickingActions = Lists.newArrayList();
   private final List<TimeTickingActionGroupEntry> tickingActionGroups = Lists.newArrayList();
-  private long lastFrame;
-  private Game game;
 
   public void start() {
-    lastFrame = getTime();
   }
 
   /**
@@ -34,28 +29,9 @@ public class Clock {
    *
    * @return The system time in milliseconds
    */
-  public long getTime() {
-    return System.nanoTime() / 1000000;
-  }
-
-  public int getDelta() {
-    long time = getTime();
-    int delta = (int) (time - lastFrame);
-    lastFrame = time;
-
-    return delta;
-  }
-
-  public void setGame(Game game) {
-    this.game = game;
-  }
+  protected abstract long getTime();
 
   public void tick() {
-    int delta = getDelta();
-    if(game != null && game.getGameState().equals(GameState.RUNNING)) {
-      game.getGameClock().addToGameTime(delta);
-    }
-
     // Fire any delayed actions
     for (TimeDelayedActionEntry entry : Lists.newArrayList(delayedActions)) {
       if (getTime() >= entry.getTimeToFire()) {

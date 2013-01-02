@@ -106,9 +106,6 @@ public class Block implements Drawable {
   }
 
   public void setShape(Shape shape) {
-    if (shape == null) {
-      System.out.println("NULL!");
-    }
     this.shape = shape;
   }
 

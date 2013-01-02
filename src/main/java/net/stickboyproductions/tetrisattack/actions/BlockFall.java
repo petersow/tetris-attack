@@ -25,7 +25,6 @@ public class BlockFall implements TimeTickingAction {
   public BlockFall(Block block, Grid grid) {
     if (DEBUG) {
       System.out.println("Making a Block Fall containing");
-
       System.out.println("x=" + block.getX() + ", y=" + block.getY());
     }
     this.block = block;

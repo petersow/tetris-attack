@@ -30,7 +30,6 @@ public class GameStart implements TimeTickingAction, Drawable {
   @Override
   public void tick(long timeElapsed) {
     this.timeElapsed = timeElapsed;
-    System.out.println(timeElapsed);
   }
 
   @Override

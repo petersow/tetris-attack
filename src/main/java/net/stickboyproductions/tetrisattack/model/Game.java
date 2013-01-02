@@ -23,6 +23,10 @@ import static net.stickboyproductions.tetrisattack.constants.GameConfig.BLOCKS_I
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_GRID;
 
 /**
+ * An instance of a game and all the logic to play it.
+ *
+ * Feels a bit overbloated.
+ *
  * User: Pete
  * Date: 27/11/12
  * Time: 22:13
@@ -212,6 +216,7 @@ public class Game extends AbstractControllable implements Drawable {
 
   public void gameOver() {
     gameState = GameState.GAME_OVER;
+    gameClock.pause();
     playerSelection.disable();
   }
 

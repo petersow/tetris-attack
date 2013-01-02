@@ -10,6 +10,8 @@ import static net.stickboyproductions.tetrisattack.constants.GameConfig.BLOCKS_I
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_GRID;
 
 /**
+ * The holder of Blocks for a game.
+ *
  * User: Pete
  * Date: 27/11/12
  * Time: 22:47

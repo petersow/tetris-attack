@@ -43,12 +43,7 @@ public class GameClock extends SystemClock {
   }
 
   public int getGameTimeInMs() {
-    System.out.println(gameTimeInMs);
     return gameTimeInMs;
-  }
-
-  public boolean isPaused() {
-    return paused;
   }
 
   public void pause() {

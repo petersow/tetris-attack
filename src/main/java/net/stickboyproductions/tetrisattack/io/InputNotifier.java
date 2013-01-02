@@ -59,9 +59,14 @@ public class InputNotifier {
             controllable.actionPressed();
           }
         }
+        if (Keyboard.getEventKey() == Keyboard.KEY_P) {
+          for(Controllable controllable : registeredHandlers ) {
+            controllable.pausePressed();
+          }
+        }
         if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
           for(Controllable controllable : registeredHandlers ) {
-            controllable.spacePressed();
+            controllable.newLinePressed();
           }
         }
       } else {

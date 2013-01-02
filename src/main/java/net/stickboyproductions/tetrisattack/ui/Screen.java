@@ -42,7 +42,7 @@ public class Screen {
     // init OpenGL
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 1, -1);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 1, -1);
     glMatrixMode(GL_MODELVIEW);
 
     glEnable(GL_TEXTURE_2D);
@@ -58,8 +58,8 @@ public class Screen {
     try {
       font.loadGlyphs();
     } catch (SlickException e) {
+      e.printStackTrace();
     }
-    ;
 
     InputStream inputStream = Screen.class.getResourceAsStream("/fonts/AgentOrange.ttf");
   }
@@ -77,8 +77,8 @@ public class Screen {
     Display.destroy();
   }
 
-  public void drawText(String text) {
-    font.drawString(500, 500, text, Color.orange);
+  public void drawText(int x, int y, String text) {
+    font.drawString(x, y, text, Color.orange);
   }
 
   public void drawQuad(Quad quad) {
@@ -102,10 +102,10 @@ public class Screen {
   }
 
   private Quad buildQuad(int x, int y, int offsetX, int offsetY) {
-    return new Quad(new Point((x * CELL_WIDTH) + offsetX, (y * CELL_HEIGHT) + offsetY),
-      new Point(((x + 1) * CELL_WIDTH) + offsetX, (y * CELL_HEIGHT) + offsetY),
-      new Point(((x + 1) * CELL_WIDTH) + offsetX, ((y + 1) * CELL_HEIGHT) + offsetY),
-      new Point((x * CELL_WIDTH) + offsetX, ((y + 1) * CELL_HEIGHT) + offsetY));
+    return new Quad(new Point((x * CELL_WIDTH) + offsetX, (SCREEN_HEIGHT - (y * CELL_HEIGHT) - offsetY)),
+      new Point(((x + 1) * CELL_WIDTH) + offsetX, (SCREEN_HEIGHT - (y * CELL_HEIGHT) - offsetY)),
+      new Point(((x + 1) * CELL_WIDTH) + offsetX, (SCREEN_HEIGHT - ((y + 1) * CELL_HEIGHT) - offsetY)),
+      new Point((x * CELL_WIDTH) + offsetX, (SCREEN_HEIGHT - ((y + 1) * CELL_HEIGHT) - offsetY)));
   }
 
   public void drawShape(Quad quad, Shape shape, double framePosition, boolean dark) {

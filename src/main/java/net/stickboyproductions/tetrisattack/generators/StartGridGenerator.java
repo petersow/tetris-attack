@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import net.stickboyproductions.tetrisattack.constants.Directions;
 import net.stickboyproductions.tetrisattack.constants.GameConfig;
-import net.stickboyproductions.tetrisattack.model.Shape;
+import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.model.Block;
 import net.stickboyproductions.tetrisattack.model.Grid;
-import net.stickboyproductions.tetrisattack.enums.BlockState;
+import net.stickboyproductions.tetrisattack.model.Shape;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
 
 import javax.inject.Inject;

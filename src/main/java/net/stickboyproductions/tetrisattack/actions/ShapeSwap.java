@@ -1,9 +1,9 @@
 package net.stickboyproductions.tetrisattack.actions;
 
-import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
-import net.stickboyproductions.tetrisattack.model.Shape;
-import net.stickboyproductions.tetrisattack.model.Block;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
+import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
+import net.stickboyproductions.tetrisattack.model.Block;
+import net.stickboyproductions.tetrisattack.model.Shape;
 
 import static net.stickboyproductions.tetrisattack.constants.ScreenConfig.CELL_WIDTH;
 import static net.stickboyproductions.tetrisattack.constants.SpeedConstants.SHAPE_SWAP_MS;

@@ -25,6 +25,8 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
   private Block rightBlock;
   private DrawableRegister drawableRegister;
 
+  private boolean enabled = false;
+
   private int offsetY = 0;
 
   double frame = 0.0;
@@ -46,39 +48,47 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   @Override
   public void moveRightPressed() {
-    Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.RIGHT);
-    if (newRightBlock != null) {
-      leftBlock = rightBlock;
-      rightBlock = newRightBlock;
+    if (enabled) {
+      Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.RIGHT);
+      if (newRightBlock != null) {
+        leftBlock = rightBlock;
+        rightBlock = newRightBlock;
+      }
     }
   }
 
   @Override
   public void moveLeftPressed() {
-    Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.LEFT);
-    if (newLeftBlock != null) {
-      rightBlock = leftBlock;
-      leftBlock = newLeftBlock;
+    if (enabled) {
+      Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.LEFT);
+      if (newLeftBlock != null) {
+        rightBlock = leftBlock;
+        leftBlock = newLeftBlock;
+      }
     }
   }
 
   @Override
   public void moveUpPressed() {
-    Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.UP);
-    Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.UP);
-    if (newRightBlock != null && newLeftBlock != null) {
-      leftBlock = newLeftBlock;
-      rightBlock = newRightBlock;
+    if (enabled) {
+      Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.UP);
+      Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.UP);
+      if (newRightBlock != null && newLeftBlock != null) {
+        leftBlock = newLeftBlock;
+        rightBlock = newRightBlock;
+      }
     }
   }
 
   @Override
   public void moveDownPressed() {
-    Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.DOWN);
-    Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.DOWN);
-    if (newRightBlock != null && newLeftBlock != null && newRightBlock.getY() > 0) {
-      leftBlock = newLeftBlock;
-      rightBlock = newRightBlock;
+    if (enabled) {
+      Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.DOWN);
+      Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.DOWN);
+      if (newRightBlock != null && newLeftBlock != null && newRightBlock.getY() > 0) {
+        leftBlock = newLeftBlock;
+        rightBlock = newRightBlock;
+      }
     }
   }
 
@@ -116,5 +126,13 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
   public void draw(Screen screen) {
     screen.drawSprite(leftBlock.getX(), leftBlock.getY(), "selected", 0, offsetY, frame);
     screen.drawSprite(rightBlock.getX(), rightBlock.getY(), "selected", 0, offsetY, frame);
+  }
+
+  public void enable() {
+    enabled = true;
+  }
+
+  public void disable() {
+    enabled = false;
   }
 }

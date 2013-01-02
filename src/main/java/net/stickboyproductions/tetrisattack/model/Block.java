@@ -1,8 +1,8 @@
 package net.stickboyproductions.tetrisattack.model;
 
 import net.stickboyproductions.tetrisattack.constants.Directions;
-import net.stickboyproductions.tetrisattack.interfaces.Drawable;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
+import net.stickboyproductions.tetrisattack.interfaces.Drawable;
 import net.stickboyproductions.tetrisattack.ui.Screen;
 
 /**
@@ -67,7 +67,6 @@ public class Block implements Drawable {
 
   @Override
   public void draw(Screen screen) {
-    System.out.println(x + " " + y);
     if ((!BlockState.EMPTY.equals(blockState) && !BlockState.DESTROYING_END.equals(blockState))
       && shape != null) {
       screen.drawShape(x, y, offsetX + shapeOffsetX, offsetY, shape, frame, y == 0);

@@ -1,10 +1,10 @@
 package net.stickboyproductions.tetrisattack.actions;
 
 import net.stickboyproductions.tetrisattack.constants.Directions;
+import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
 import net.stickboyproductions.tetrisattack.model.Block;
 import net.stickboyproductions.tetrisattack.model.Grid;
-import net.stickboyproductions.tetrisattack.enums.BlockState;
 
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.DEBUG;
 import static net.stickboyproductions.tetrisattack.constants.SpeedConstants.FALL_BLOCK_MS;

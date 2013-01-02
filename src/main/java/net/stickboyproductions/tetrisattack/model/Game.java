@@ -2,16 +2,17 @@ package net.stickboyproductions.tetrisattack.model;
 
 import com.google.common.collect.Lists;
 import net.stickboyproductions.tetrisattack.Clock;
-import net.stickboyproductions.tetrisattack.actions.GridMoveUp;
+import net.stickboyproductions.tetrisattack.actions.*;
 import net.stickboyproductions.tetrisattack.constants.GameConfig;
-import net.stickboyproductions.tetrisattack.io.InputNotifier;
-import net.stickboyproductions.tetrisattack.actions.BlockDestroy;
-import net.stickboyproductions.tetrisattack.actions.BlockFall;
-import net.stickboyproductions.tetrisattack.actions.ShapeSwap;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
+import net.stickboyproductions.tetrisattack.enums.GameState;
 import net.stickboyproductions.tetrisattack.generators.StartGridGenerator;
+import net.stickboyproductions.tetrisattack.interfaces.Drawable;
+import net.stickboyproductions.tetrisattack.io.InputNotifier;
 import net.stickboyproductions.tetrisattack.processors.ChainBuilderProcess;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
+import net.stickboyproductions.tetrisattack.ui.GameClock;
+import net.stickboyproductions.tetrisattack.ui.Screen;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -25,7 +26,10 @@ import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_
  * Date: 27/11/12
  * Time: 22:13
  */
-public class Game extends AbstractControllable {
+public class Game extends AbstractControllable implements Drawable {
+
+  public static final int MESSAGE_X = 200;
+  public static final int MESSAGE_Y = 200;
 
   private DrawableRegister drawableRegister;
   private Grid grid;
@@ -34,6 +38,12 @@ public class Game extends AbstractControllable {
   private InputNotifier inputNotifier;
   private Clock clock;
   private GridMoveUp gridMoveUp;
+
+  // UI things
+  private Score score;
+  private GameClock gameClock;
+
+  private GameState gameState = GameState.STARTING;
 
   private PlayerSelection playerSelection;
 
@@ -47,6 +57,7 @@ public class Game extends AbstractControllable {
     this.startGridGenerator = startGridGenerator;
     this.inputNotifier = inputNotifier;
     this.clock = clock;
+    clock.setGame(this);
     this.grid = grid;
   }
 
@@ -65,8 +76,13 @@ public class Game extends AbstractControllable {
 
     inputNotifier.register(this);
 
-    this.gridMoveUp = new GridMoveUp(this, playerSelection);
-    clock.register(gridMoveUp);
+    GameStart gameStart = new GameStart(this, drawableRegister);
+    clock.register(gameStart);
+
+    score = new Score(drawableRegister);
+    gameClock = new GameClock(drawableRegister);
+
+    drawableRegister.register(this);
 
     // TODO : Move to some load state ?
     // Test block fall
@@ -102,38 +118,49 @@ public class Game extends AbstractControllable {
 //    grid.get(0, 4).setShape(Shape.GREEN);
   }
 
-  private int count = 0;
+  public void startGame() {
+    gameState = GameState.RUNNING;
+
+    this.gridMoveUp = new GridMoveUp(this, playerSelection);
+    clock.register(gridMoveUp);
+    playerSelection.enable();
+  }
 
   public void update() {
-    count++;
-
-    // Test block fall
+    if (gameState.equals(GameState.RUNNING)) {
+      // Test block fall
 //    if(count >= 10) {
 //      grid.get(0, 3).setBlockState(BlockState.IDLE);
 //      grid.get(0, 3).setShape(Shape.GREEN);
 //      count = -100000000;
 //    }
 
-    for (int y = 0; y < ROWS_IN_GRID; y++) {
-      for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
-        Block currentBlock = grid.get(x, y);
-        if (currentBlock.getBlockState().equals(BlockState.IDLE)) {
-          if (currentBlock.canFall()) {
-            System.out.println("I can fall! " + currentBlock.getX() + ", " + currentBlock.getY());
-            BlockFall newBlockFall = new BlockFall(currentBlock, grid);
-            clock.register(newBlockFall);
-          } else {
-            if (y > 0) {
-              // Build chain
-              Set<Block> chain = chainBuilderProcess.buildClearableChain(currentBlock, grid);
-              if (chain.size() >= 3) {
-                System.out.println("Found a chain - " + chain.size() + " " + chain.iterator().next().getShape());
-                List<BlockDestroy> blockDestroyGroup = Lists.newArrayList();
-                for (Block next : chain) {
-                  BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next));
-                  blockDestroyGroup.add(newBlockDestroy);
+      for (int y = 0; y < ROWS_IN_GRID; y++) {
+        for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+          Block currentBlock = grid.get(x, y);
+          if (currentBlock.getBlockState().equals(BlockState.IDLE)) {
+            if (currentBlock.canFall()) {
+              System.out.println("I can fall! " + currentBlock.getX() + ", " + currentBlock.getY());
+              BlockFall newBlockFall = new BlockFall(currentBlock, grid);
+              clock.register(newBlockFall);
+            } else {
+              if (y > 0) {
+                // Build chain
+                Set<Block> chain = chainBuilderProcess.buildClearableChain(currentBlock, grid);
+                if (chain.size() >= 3) {
+                  System.out.println("Found a chain - " + chain.size() + " " + chain.iterator().next().getShape());
+                  // calculate bonus points for big chain
+                  int chainOverThree = chain.size() - 3;
+                  if (chainOverThree > 0) {
+                    score.addToScore((10 * chainOverThree) + 10);
+                  }
+                  List<BlockDestroy> blockDestroyGroup = Lists.newArrayList();
+                  for (Block next : chain) {
+                    BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next), score);
+                    blockDestroyGroup.add(newBlockDestroy);
+                  }
+                  clock.register(blockDestroyGroup);
                 }
-                clock.register(blockDestroyGroup);
               }
             }
           }
@@ -148,28 +175,64 @@ public class Game extends AbstractControllable {
 
   @Override
   public void actionPressed() {
-    Block leftBlock = grid.get(playerSelection.getLeftX(), playerSelection.getY());
-    Block rightBlock = grid.get(playerSelection.getRightX(), playerSelection.getY());
-    if (leftBlock != null && rightBlock != null && leftBlock.canSwap() && rightBlock.canSwap()) {
-      ShapeSwap shapeSwap = new ShapeSwap(leftBlock, rightBlock);
-      clock.register(shapeSwap);
+    if (gameState.equals(GameState.RUNNING)) {
+      Block leftBlock = grid.get(playerSelection.getLeftX(), playerSelection.getY());
+      Block rightBlock = grid.get(playerSelection.getRightX(), playerSelection.getY());
+      if (leftBlock != null && rightBlock != null && leftBlock.canSwap() && rightBlock.canSwap()) {
+        ShapeSwap shapeSwap = new ShapeSwap(leftBlock, rightBlock);
+        clock.register(shapeSwap);
+      }
     }
   }
 
   @Override
-  public void spacePressed() {
-//    moveUp();
-    gridMoveUp.speedUp();
+  public void pausePressed() {
+    if (gameState.equals(GameState.RUNNING)) {
+      gridMoveUp.pause();
+      playerSelection.disable();
+      gameState = GameState.PAUSED;
+    } else if (gameState.equals(GameState.PAUSED)) {
+      playerSelection.enable();
+      gridMoveUp.resume();
+      gameState = GameState.RUNNING;
+    }
+  }
+
+  @Override
+  public void pauseReleased() {
+    gridMoveUp.resume();
+    playerSelection.disable();
+  }
+
+  @Override
+  public void newLinePressed() {
+    if (gameState.equals(GameState.RUNNING)) {
+      score.addToScore(1);
+      gridMoveUp.speedUp();
+    }
+  }
+
+  public void gameOver() {
+    gameState = GameState.GAME_OVER;
+    playerSelection.disable();
+    gridMoveUp.pause();
   }
 
   public void moveUp() {
+    // If top line has any blocks with shapes in then the game should end
+    for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
+      if (!grid.get(x, 11).getBlockState().equals(BlockState.EMPTY)) {
+        gameOver();
+        return;
+      }
+    }
+
     // Stop old cells from being drawn
     for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
       drawableRegister.unregister(grid.get(x, 11));
     }
     // Modify state
     grid.moveAllUp();
-    playerSelection.moveUpPressed();
 
     // Remove offset caused by slow move up
     for (int y = 0; y < ROWS_IN_GRID; y++) {
@@ -191,5 +254,22 @@ public class Game extends AbstractControllable {
 
   public Grid getGrid() {
     return grid;
+  }
+
+  public GameState getGameState() {
+    return gameState;
+  }
+
+  @Override
+  public void draw(Screen screen) {
+    if (gameState.equals(GameState.PAUSED)) {
+      screen.drawText(MESSAGE_X, MESSAGE_Y, "Paused");
+    } else if (gameState.equals(GameState.GAME_OVER)) {
+      screen.drawText(MESSAGE_X, MESSAGE_Y, "Game Over");
+    }
+  }
+
+  public GameClock getGameClock() {
+    return gameClock;
   }
 }

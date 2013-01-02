@@ -26,7 +26,11 @@ public interface Controllable {
 
   void actionReleased();
 
-  void spacePressed();
+  void newLinePressed();
 
-  void spaceReleased();
+  void newLineReleased();
+
+  void pausePressed();
+
+  void pauseReleased();
 }

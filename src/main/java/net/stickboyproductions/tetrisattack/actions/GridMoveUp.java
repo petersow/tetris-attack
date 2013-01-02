@@ -21,6 +21,7 @@ public class GridMoveUp implements TimeTickingAction {
   private int totalOffset;
   private PlayerSelection playerSelection;
   private long timeElapsed;
+  private long timeToNextFire;
 
   private long nextFire = GRID_MOVE_UP_OFFSET_MS;
   private Game game;
@@ -73,6 +74,12 @@ public class GridMoveUp implements TimeTickingAction {
     //To change body of implemented methods use File | Settings | File Templates.
   }
 
+  public void pause() {
+    timeToNextFire = nextFire - timeElapsed;
+    System.out.println(timeToNextFire);
+    nextFire = Integer.MAX_VALUE;
+  }
+
   public void reset() {
     totalOffset = 0;
   }
@@ -80,5 +87,9 @@ public class GridMoveUp implements TimeTickingAction {
   public void speedUp() {
     spedUp = true;
     nextFire = timeElapsed + 1;
+  }
+
+  public void resume() {
+    //To change body of created methods use File | Settings | File Templates.
   }
 }

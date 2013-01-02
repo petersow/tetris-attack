@@ -2,9 +2,12 @@ package net.stickboyproductions.tetrisattack;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.stickboyproductions.tetrisattack.enums.GameState;
 import net.stickboyproductions.tetrisattack.interfaces.TimeDelayedAction;
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
+import net.stickboyproductions.tetrisattack.model.Game;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class Clock {
   private final List<TimeTickingActionEntry> tickingActions = Lists.newArrayList();
   private final List<TimeTickingActionGroupEntry> tickingActionGroups = Lists.newArrayList();
   private long lastFrame;
+  private Game game;
 
   public void start() {
     lastFrame = getTime();
@@ -42,7 +46,16 @@ public class Clock {
     return delta;
   }
 
+  public void setGame(Game game) {
+    this.game = game;
+  }
+
   public void tick() {
+    int delta = getDelta();
+    if(game != null && game.getGameState().equals(GameState.RUNNING)) {
+      game.getGameClock().addToGameTime(delta);
+    }
+
     // Fire any delayed actions
     for (TimeDelayedActionEntry entry : Lists.newArrayList(delayedActions)) {
       if (getTime() >= entry.getTimeToFire()) {

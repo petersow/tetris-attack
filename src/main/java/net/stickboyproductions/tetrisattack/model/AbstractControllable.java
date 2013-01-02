@@ -53,22 +53,32 @@ public abstract class AbstractControllable implements Controllable {
   }
 
   @Override
+  public void pausePressed() {
+    // Do Nothing
+  }
+
+  @Override
+  public void pauseReleased() {
+    // Do Nothing
+  }
+
+  @Override
+  public void newLinePressed() {
+    // Do Nothing
+  }
+
+  @Override
+  public void newLineReleased() {
+    // Do Nothing
+  }
+
+  @Override
   public void actionPressed() {
     // Do Nothing
   }
 
   @Override
   public void actionReleased() {
-    // Do Nothing
-  }
-
-  @Override
-  public void spacePressed() {
-    // Do Nothing
-  }
-
-  @Override
-  public void spaceReleased() {
     // Do Nothing
   }
 }

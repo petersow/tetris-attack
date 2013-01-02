@@ -1,5 +1,6 @@
 package net.stickboyproductions.tetrisattack.model;
 
+import com.google.common.collect.ImmutableSet;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.generators.ShapeGenerator;
 
@@ -11,7 +12,7 @@ import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_
 
 /**
  * The holder of Blocks for a game.
- *
+ * <p/>
  * User: Pete
  * Date: 27/11/12
  * Time: 22:47
@@ -63,7 +64,12 @@ public class Grid {
     for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
       Block newBlock = new Block(this, x, 0);
       newBlock.setBlockState(BlockState.IDLE);
-      newBlock.setShape(shapeGenerator.get());
+      Block blockAbove = grid[x][0];
+      if (blockAbove.getShape() != null) {
+        newBlock.setShape(shapeGenerator.get(ImmutableSet.of(blockAbove.getShape())));
+      } else {
+        newBlock.setShape(shapeGenerator.get());
+      }
       newGrid[x][0] = newBlock;
     }
 

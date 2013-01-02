@@ -21,7 +21,6 @@ public class GridMoveUp implements TimeTickingAction {
   private int totalOffset;
   private PlayerSelection playerSelection;
   private long timeElapsed;
-  private long timeToNextFire;
 
   private long nextFire = GRID_MOVE_UP_OFFSET_MS;
   private Game game;
@@ -61,17 +60,15 @@ public class GridMoveUp implements TimeTickingAction {
 
   @Override
   public boolean isFinished() {
-    return false;  //To change body of implemented methods use File | Settings | File Templates.
+    return false;
   }
 
   @Override
   public void start() {
-    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
   public void end() {
-    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   public void reset() {

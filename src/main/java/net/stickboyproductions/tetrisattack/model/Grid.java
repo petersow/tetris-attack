@@ -1,8 +1,6 @@
 package net.stickboyproductions.tetrisattack.model;
 
-import com.google.common.collect.ImmutableSet;
-import net.stickboyproductions.tetrisattack.enums.BlockState;
-import net.stickboyproductions.tetrisattack.generators.ShapeGenerator;
+import net.stickboyproductions.tetrisattack.generators.LineGenerator;
 
 import javax.inject.Inject;
 
@@ -21,11 +19,11 @@ public class Grid {
 
   private Block[][] grid =
     new Block[BLOCKS_IN_ROW_COUNT][ROWS_IN_GRID];
-  private ShapeGenerator shapeGenerator;
+  private LineGenerator lineGenerator;
 
   @Inject
-  public Grid(ShapeGenerator shapeGenerator) {
-    this.shapeGenerator = shapeGenerator;
+  public Grid(LineGenerator lineGenerator) {
+    this.lineGenerator = lineGenerator;
   }
 
   public Block get(int x, int y) {
@@ -61,16 +59,10 @@ public class Grid {
   public void moveAllUp() {
     Block[][] newGrid =
       new Block[BLOCKS_IN_ROW_COUNT][ROWS_IN_GRID];
+
+    Block[] newLine = lineGenerator.generate(this);
     for (int x = 0; x < BLOCKS_IN_ROW_COUNT; x++) {
-      Block newBlock = new Block(this, x, 0);
-      newBlock.setBlockState(BlockState.IDLE);
-      Block blockAbove = grid[x][0];
-      if (blockAbove.getShape() != null) {
-        newBlock.setShape(shapeGenerator.get(ImmutableSet.of(blockAbove.getShape())));
-      } else {
-        newBlock.setShape(shapeGenerator.get());
-      }
-      newGrid[x][0] = newBlock;
+      newGrid[x][0] = newLine[x];
     }
 
     for (int y = ROWS_IN_GRID - 2; y >= 0; y--) {

@@ -7,7 +7,7 @@ import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.enums.GameState;
 import net.stickboyproductions.tetrisattack.generators.StartGridGenerator;
 import net.stickboyproductions.tetrisattack.interfaces.Drawable;
-import net.stickboyproductions.tetrisattack.io.InputNotifier;
+import net.stickboyproductions.tetrisattack.io.InputController;
 import net.stickboyproductions.tetrisattack.processors.ChainBuilderProcess;
 import net.stickboyproductions.tetrisattack.timing.GameClock;
 import net.stickboyproductions.tetrisattack.timing.SystemClock;
@@ -41,7 +41,7 @@ public class Game extends AbstractControllable implements Drawable {
   private ChainBuilderProcess chainBuilderProcess;
   private SystemClock systemClock;
   private StartGridGenerator startGridGenerator;
-  private InputNotifier inputNotifier;
+  private InputController inputController;
   private GameClock gameClock;
   private GridMoveUp gridMoveUp;
 
@@ -58,12 +58,12 @@ public class Game extends AbstractControllable implements Drawable {
   @Inject
   public Game(DrawableRegister drawableRegister, ChainBuilderProcess chainBuilderProcess,
               GameClock gameClock, SystemClock systemClock,
-              StartGridGenerator startGridGenerator, InputNotifier inputNotifier, Grid grid) {
+              StartGridGenerator startGridGenerator, InputController inputController, Grid grid) {
     this.drawableRegister = drawableRegister;
     this.chainBuilderProcess = chainBuilderProcess;
     this.systemClock = systemClock;
     this.startGridGenerator = startGridGenerator;
-    this.inputNotifier = inputNotifier;
+    this.inputController = inputController;
     this.grid = grid;
     this.gameClock = gameClock;
   }
@@ -79,9 +79,9 @@ public class Game extends AbstractControllable implements Drawable {
     startGridGenerator.generate(grid);
 
     playerSelection = new PlayerSelection(gameClock, grid, grid.get(GameConfig.PLAYER_START_X, GameConfig.PLAYER_START_Y),
-      drawableRegister, inputNotifier);
+      drawableRegister, inputController);
 
-    inputNotifier.register(this);
+    inputController.registerHandler(this);
 
     GameStart gameStart = new GameStart(this, drawableRegister);
     systemClock.register(gameStart);

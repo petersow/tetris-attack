@@ -3,7 +3,7 @@ package net.stickboyproductions.tetrisattack.model;
 import net.stickboyproductions.tetrisattack.constants.Directions;
 import net.stickboyproductions.tetrisattack.interfaces.Drawable;
 import net.stickboyproductions.tetrisattack.interfaces.TimeDelayedAction;
-import net.stickboyproductions.tetrisattack.io.InputNotifier;
+import net.stickboyproductions.tetrisattack.io.InputController;
 import net.stickboyproductions.tetrisattack.timing.GameClock;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
 import net.stickboyproductions.tetrisattack.ui.Screen;
@@ -33,7 +33,7 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   public PlayerSelection(GameClock clock, Grid grid,
                          Block leftBlock,
-                         DrawableRegister drawableRegister, InputNotifier inputNotifier) {
+                         DrawableRegister drawableRegister, InputController inputController) {
     this.clock = clock;
     this.grid = grid;
     this.leftBlock = leftBlock;
@@ -43,7 +43,7 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
     clock.schedule(this, 500);
     drawableRegister.register(this);
-    inputNotifier.register(this);
+    inputController.registerHandler(this);
   }
 
   @Override

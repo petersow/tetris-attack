@@ -7,6 +7,8 @@ package net.stickboyproductions.tetrisattack.constants;
  */
 public class SpeedConstants {
 
+  public static final int KEY_PRESS_PAUSE_MS = 150;
+
   public static final int FALL_PAUSE_MS = 200;
   public static final int FALL_BLOCK_MS = 16;
 

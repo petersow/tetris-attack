@@ -1,5 +1,6 @@
 package net.stickboyproductions.tetrisattack;
 
+import net.stickboyproductions.tetrisattack.io.InputController;
 import net.stickboyproductions.tetrisattack.io.InputNotifier;
 import net.stickboyproductions.tetrisattack.model.Game;
 import net.stickboyproductions.tetrisattack.model.Grid;
@@ -19,7 +20,7 @@ import javax.inject.Inject;
  */
 public class Runner {
 
-  private InputNotifier inputNotifier;
+  private InputController inputController;
   private Screen screen;
   private TextureStore textureStore;
   private SystemClock clock;
@@ -29,11 +30,11 @@ public class Runner {
   private Game game;
 
   @Inject
-  public Runner(InputNotifier inputNotifier, Screen screen,
+  public Runner(InputController inputController, Screen screen,
                 TextureStore textureStore,
                 SystemClock clock, DrawableRegister drawableRegister,
                 Grid grid, Game game) {
-    this.inputNotifier = inputNotifier;
+    this.inputController = inputController;
     this.screen = screen;
     this.textureStore = textureStore;
     this.clock = clock;
@@ -56,7 +57,7 @@ public class Runner {
       // Clear the screen before we redraw things
       screen.clear();
       // Check any user input
-      inputNotifier.pollInput();
+      inputController.update();
 
       clock.tick();
       game.update();

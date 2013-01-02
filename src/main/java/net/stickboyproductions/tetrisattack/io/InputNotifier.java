@@ -1,11 +1,8 @@
 package net.stickboyproductions.tetrisattack.io;
 
-import com.google.common.collect.Lists;
-import net.stickboyproductions.tetrisattack.interfaces.Controllable;
+import net.stickboyproductions.tetrisattack.constants.Controls;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-
-import java.util.List;
 
 /**
  * User: Pete
@@ -13,10 +10,10 @@ import java.util.List;
  * Time: 17:25
  */
 public class InputNotifier {
+  private InputController inputController;
 
-  private static final List<Controllable> registeredHandlers = Lists.newArrayList();
-
-  public InputNotifier() {
+  public InputNotifier(InputController inputController) {
+    this.inputController = inputController;
   }
 
   public void pollInput() {
@@ -30,59 +27,49 @@ public class InputNotifier {
     while (Keyboard.next()) {
       if (Keyboard.getEventKeyState()) {
         if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
-          for(Controllable controllable : registeredHandlers ) {
-            controllable.moveLeftPressed();
-          }
+          inputController.createAction(Controls.LEFT, Controls.LEFT_SPAMMABLE);
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
-          for(Controllable controllable : registeredHandlers ) {
-            controllable.moveRightPressed();
-          }
+          inputController.createAction(Controls.RIGHT, Controls.RIGHT_SPAMMABLE);
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
-          for(Controllable controllable : registeredHandlers ) {
-            controllable.moveUpPressed();
-          }
+          inputController.createAction(Controls.UP, Controls.UP_SPAMMABLE);
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
-          for(Controllable controllable : registeredHandlers ) {
-            controllable.moveDownPressed();
-          }
+          inputController.createAction(Controls.DOWN, Controls.DOWN_SPAMMABLE);
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_X) {
-          for(Controllable controllable : registeredHandlers ) {
-            controllable.actionPressed();
-          }
+          inputController.createAction(Controls.BLOCK_SWAP, Controls.BLOCK_SWAP_SPAMMABLE);
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_P) {
-          for(Controllable controllable : registeredHandlers ) {
-            controllable.pausePressed();
-          }
+          inputController.createAction(Controls.PAUSE, Controls.PAUSE_SPAMMABLE);
         }
         if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-          for(Controllable controllable : registeredHandlers ) {
-            controllable.newLinePressed();
-          }
+          inputController.createAction(Controls.NEW_LINE, Controls.NEW_LINE_SPAMMABLE);
         }
       } else {
-        if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-          System.out.println("A Key Released");
+        if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
+          inputController.removeAction(Controls.LEFT);
         }
-        if (Keyboard.getEventKey() == Keyboard.KEY_S) {
-          System.out.println("S Key Released");
+        if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
+          inputController.removeAction(Controls.RIGHT);
         }
-        if (Keyboard.getEventKey() == Keyboard.KEY_D) {
-          System.out.println("D Key Released");
+        if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+          inputController.removeAction(Controls.UP);
+        }
+        if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+          inputController.removeAction(Controls.DOWN);
+        }
+        if (Keyboard.getEventKey() == Keyboard.KEY_X) {
+          inputController.removeAction(Controls.BLOCK_SWAP);
+        }
+        if (Keyboard.getEventKey() == Keyboard.KEY_P) {
+          inputController.removeAction(Controls.PAUSE);
+        }
+        if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+          inputController.removeAction(Controls.NEW_LINE);
         }
       }
     }
-  }
-
-  public void register(Controllable controllable) {
-    registeredHandlers.add(controllable);
-  }
-
-  public void unRegister(Controllable controllable) {
-    registeredHandlers.remove(controllable);
   }
 }

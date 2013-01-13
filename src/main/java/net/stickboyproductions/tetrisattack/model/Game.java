@@ -11,9 +11,7 @@ import net.stickboyproductions.tetrisattack.io.InputController;
 import net.stickboyproductions.tetrisattack.processors.ChainBuilderProcess;
 import net.stickboyproductions.tetrisattack.timing.GameClock;
 import net.stickboyproductions.tetrisattack.timing.SystemClock;
-import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
-import net.stickboyproductions.tetrisattack.ui.GameClockPanel;
-import net.stickboyproductions.tetrisattack.ui.Screen;
+import net.stickboyproductions.tetrisattack.ui.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -24,9 +22,9 @@ import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_
 
 /**
  * An instance of a game and all the logic to play it.
- *
+ * <p/>
  * Feels a bit overbloated.
- *
+ * <p/>
  * User: Pete
  * Date: 27/11/12
  * Time: 22:13
@@ -44,10 +42,14 @@ public class Game extends AbstractControllable implements Drawable {
   private InputController inputController;
   private GameClock gameClock;
   private GridMoveUp gridMoveUp;
+  private Speed speed;
+  private Score score = new Score();
 
   // UI things
-  private Score score;
+
   private GameClockPanel gameClockPanel;
+  private GameSpeedPanel gameSpeedPanel;
+  private GameScorePanel gameScorePanel;
 
   private GameState gameState = GameState.STARTING;
 
@@ -86,10 +88,15 @@ public class Game extends AbstractControllable implements Drawable {
     GameStart gameStart = new GameStart(this, drawableRegister);
     systemClock.register(gameStart);
 
-    score = new Score(drawableRegister);
+    // speed will get passed in
+    speed = new Speed(1);
+
     gameClockPanel = new GameClockPanel(drawableRegister, gameClock);
+    gameSpeedPanel = new GameSpeedPanel(drawableRegister, speed);
+    gameScorePanel = new GameScorePanel(drawableRegister, score);
 
     drawableRegister.register(this);
+    playerSelection.enableMovement();
 
     // TODO : Move to some load state ?
     // Test block fall
@@ -129,9 +136,8 @@ public class Game extends AbstractControllable implements Drawable {
     gameState = GameState.RUNNING;
     gameClock.start();
 
-    this.gridMoveUp = new GridMoveUp(this, playerSelection);
+    this.gridMoveUp = new GridMoveUp(this, playerSelection, speed);
     gameClock.register(gridMoveUp);
-    playerSelection.enable();
   }
 
   public void update() {
@@ -164,10 +170,11 @@ public class Game extends AbstractControllable implements Drawable {
                   }
                   List<BlockDestroy> blockDestroyGroup = Lists.newArrayList();
                   for (Block next : chain) {
-                    BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next), score);
+                    BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next), score, gridMoveUp);
                     blockDestroyGroup.add(newBlockDestroy);
                   }
                   gameClock.register(blockDestroyGroup);
+                  speed.updateBlocksCleared(chain.size());
                 }
               }
             }
@@ -187,6 +194,8 @@ public class Game extends AbstractControllable implements Drawable {
       Block leftBlock = grid.get(playerSelection.getLeftX(), playerSelection.getY());
       Block rightBlock = grid.get(playerSelection.getRightX(), playerSelection.getY());
       if (leftBlock != null && rightBlock != null && leftBlock.canSwap() && rightBlock.canSwap()) {
+        System.out.println("Left - " + leftBlock.getBlockState());
+        System.out.println("Right - " + rightBlock.getBlockState());
         ShapeSwap shapeSwap = new ShapeSwap(leftBlock, rightBlock);
         gameClock.register(shapeSwap);
       }
@@ -197,11 +206,11 @@ public class Game extends AbstractControllable implements Drawable {
   public void pausePressed() {
     if (gameState.equals(GameState.RUNNING)) {
       gameClock.pause();
-      playerSelection.disable();
+      playerSelection.disableMovement();
       gameState = GameState.PAUSED;
     } else if (gameState.equals(GameState.PAUSED)) {
       gameClock.resume();
-      playerSelection.enable();
+      playerSelection.enableMovement();
       gameState = GameState.RUNNING;
     }
   }
@@ -217,7 +226,7 @@ public class Game extends AbstractControllable implements Drawable {
   public void gameOver() {
     gameState = GameState.GAME_OVER;
     gameClock.pause();
-    playerSelection.disable();
+    playerSelection.disableMovement();
   }
 
   public void moveUp() {
@@ -273,5 +282,9 @@ public class Game extends AbstractControllable implements Drawable {
 
   public GameClockPanel getGameClockPanel() {
     return gameClockPanel;
+  }
+
+  public Score getScore() {
+    return score;
   }
 }

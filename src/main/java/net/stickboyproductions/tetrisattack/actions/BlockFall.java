@@ -65,6 +65,8 @@ public class BlockFall implements TimeTickingAction {
   @Override
   public void start() {
     block.setBlockState(BlockState.PAUSED_BEFORE_FALLING);
+    // Reserve the block below
+    grid.getBlockToTheDirection(block, Directions.DOWN).setBlockState(BlockState.RESERVED);
   }
 
   @Override

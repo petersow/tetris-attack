@@ -17,13 +17,15 @@ public class BlockDestroy implements TimeTickingAction {
   private Block block;
   private int distanceFromOrigin;
   private Score score;
+  private GridMoveUp gridMoveUp;
 
   private int nextFlash = BLOCK_DESTROY_FLASH_MS;
 
-  public BlockDestroy(Block block, int distanceFromOrigin, Score score) {
+  public BlockDestroy(Block block, int distanceFromOrigin, Score score, GridMoveUp gridMoveUp) {
     this.block = block;
     this.distanceFromOrigin = distanceFromOrigin;
     this.score = score;
+    this.gridMoveUp = gridMoveUp;
   }
 
   @Override
@@ -55,11 +57,13 @@ public class BlockDestroy implements TimeTickingAction {
 
   @Override
   public void start() {
+    gridMoveUp.pause();
     block.setBlockState(BlockState.DESTROYING);
   }
 
   @Override
   public void end() {
+    gridMoveUp.resume();
     block.setFrame(0.0);
     block.setBlockState(BlockState.EMPTY);
   }

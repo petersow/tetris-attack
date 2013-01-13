@@ -8,7 +8,6 @@ import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.model.Block;
 import net.stickboyproductions.tetrisattack.model.Grid;
 import net.stickboyproductions.tetrisattack.model.Shape;
-import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
 
 import javax.inject.Inject;
 import java.util.Random;
@@ -22,13 +21,10 @@ import java.util.Set;
 public class StartGridGenerator {
 
   private final Random rand = new Random(System.currentTimeMillis());
-  private DrawableRegister drawableRegister;
   private ShapeGenerator shapeGenerator;
 
   @Inject
-  public StartGridGenerator(DrawableRegister drawableRegister,
-                            ShapeGenerator shapeGenerator) {
-    this.drawableRegister = drawableRegister;
+  public StartGridGenerator(ShapeGenerator shapeGenerator) {
     this.shapeGenerator = shapeGenerator;
   }
 

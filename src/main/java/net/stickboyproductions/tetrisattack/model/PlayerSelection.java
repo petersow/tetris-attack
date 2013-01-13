@@ -25,7 +25,8 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
   private Block rightBlock;
   private DrawableRegister drawableRegister;
 
-  private boolean enabled = false;
+  private boolean enabledMovement = false;
+  private boolean enabledAction = false;
 
   private int offsetY = 0;
 
@@ -48,7 +49,7 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   @Override
   public void moveRightPressed() {
-    if (enabled) {
+    if (enabledMovement) {
       Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.RIGHT);
       if (newRightBlock != null) {
         leftBlock = rightBlock;
@@ -59,7 +60,7 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   @Override
   public void moveLeftPressed() {
-    if (enabled) {
+    if (enabledMovement) {
       Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.LEFT);
       if (newLeftBlock != null) {
         rightBlock = leftBlock;
@@ -70,7 +71,7 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   @Override
   public void moveUpPressed() {
-    if (enabled) {
+    if (enabledMovement) {
       Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.UP);
       Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.UP);
       if (newRightBlock != null && newLeftBlock != null) {
@@ -82,7 +83,7 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
 
   @Override
   public void moveDownPressed() {
-    if (enabled) {
+    if (enabledMovement) {
       Block newLeftBlock = grid.getBlockToTheDirection(leftBlock, Directions.DOWN);
       Block newRightBlock = grid.getBlockToTheDirection(rightBlock, Directions.DOWN);
       if (newRightBlock != null && newLeftBlock != null && newRightBlock.getY() > 0) {
@@ -128,11 +129,19 @@ public class PlayerSelection extends AbstractControllable implements TimeDelayed
     screen.drawSprite(rightBlock.getX(), rightBlock.getY(), "selected", 0, offsetY, frame);
   }
 
-  public void enable() {
-    enabled = true;
+  public void enableMovement() {
+    enabledMovement = true;
   }
 
-  public void disable() {
-    enabled = false;
+  public void enableAction() {
+    enabledAction = true;
+  }
+
+  public void disableMovement() {
+    enabledMovement = false;
+  }
+
+  public void disableAction() {
+    enabledAction = false;
   }
 }

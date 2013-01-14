@@ -1,6 +1,7 @@
 package net.stickboyproductions.tetrisattack.model;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.stickboyproductions.tetrisattack.actions.*;
 import net.stickboyproductions.tetrisattack.constants.GameConfig;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
@@ -8,6 +9,7 @@ import net.stickboyproductions.tetrisattack.enums.GameState;
 import net.stickboyproductions.tetrisattack.generators.StartGridGenerator;
 import net.stickboyproductions.tetrisattack.interfaces.Drawable;
 import net.stickboyproductions.tetrisattack.io.InputController;
+import net.stickboyproductions.tetrisattack.levelloader.LevelLoaderProcess;
 import net.stickboyproductions.tetrisattack.processors.ChainBuilderProcess;
 import net.stickboyproductions.tetrisattack.timing.GameClock;
 import net.stickboyproductions.tetrisattack.timing.SystemClock;
@@ -55,6 +57,9 @@ public class Game extends AbstractControllable implements Drawable {
 
   private PlayerSelection playerSelection;
 
+  // level loader!
+  LevelLoaderProcess levelLoader = new LevelLoaderProcess();
+
   // TODO : wrap in model?
 
   @Inject
@@ -78,7 +83,15 @@ public class Game extends AbstractControllable implements Drawable {
       }
     }
 
-    startGridGenerator.generate(grid);
+    try {
+//      levelLoader.load("puzzles/1-1.xml", grid);
+      levelLoader.load("tutorial/combos/etc-4-4.xml", grid);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      System.out.println("error loading level so loading a random one");
+      startGridGenerator.generate(grid);
+    }
+
 
     playerSelection = new PlayerSelection(gameClock, grid, grid.get(GameConfig.PLAYER_START_X, GameConfig.PLAYER_START_Y),
       drawableRegister, inputController);
@@ -143,6 +156,7 @@ public class Game extends AbstractControllable implements Drawable {
   public void update() {
     gameClock.tick();
     if (gameState.equals(GameState.RUNNING)) {
+      Set<Block> combo = Sets.newHashSet();
       // Test block fall
 //    if(count >= 10) {
 //      grid.get(0, 3).setBlockState(BlockState.IDLE);
@@ -163,11 +177,7 @@ public class Game extends AbstractControllable implements Drawable {
                 Set<Block> chain = chainBuilderProcess.buildClearableChain(currentBlock, grid);
                 if (chain.size() >= 3) {
                   System.out.println("Found a chain - " + chain.size() + " " + chain.iterator().next().getShape());
-                  // calculate bonus points for big chain
-                  int chainOverThree = chain.size() - 3;
-                  if (chainOverThree > 0) {
-                    score.addToScore((10 * chainOverThree) + 10);
-                  }
+                  combo.addAll(chain);
                   List<BlockDestroy> blockDestroyGroup = Lists.newArrayList();
                   for (Block next : chain) {
                     BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next), score, gridMoveUp);
@@ -179,6 +189,15 @@ public class Game extends AbstractControllable implements Drawable {
               }
             }
           }
+        }
+      }
+      // calculate bonus points for combo
+      if(combo.size() > 3) {
+        System.out.println("There was a combo of size [" + combo.size() + "]");
+        // todo : draw on screen
+        int comboOverThree = combo.size() - 3;
+        if (comboOverThree > 0) {
+          score.addToScore((10 * comboOverThree) + 10);
         }
       }
     }

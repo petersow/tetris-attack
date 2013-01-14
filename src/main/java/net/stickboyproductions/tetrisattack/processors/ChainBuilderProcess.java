@@ -6,6 +6,7 @@ import net.stickboyproductions.tetrisattack.constants.Directions;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.model.Block;
 import net.stickboyproductions.tetrisattack.model.Grid;
+import net.stickboyproductions.tetrisattack.model.Shape;
 
 import java.util.Set;
 
@@ -20,22 +21,56 @@ public class ChainBuilderProcess {
   }
 
   public Set<Block> buildClearableChain(Block startBlock, Grid grid) {
-    Set<Block> result = Sets.newHashSet();
-
-    Set<Block> xChain = buildXChain(startBlock, grid);
-    if (xChain.size() >= 3) {
-      result.addAll(xChain);
+    Set<Block> result = Sets.newHashSet(startBlock);
+    if (startBlock != null) {
+      result.addAll(expandChain(startBlock, grid, result));
     }
-    Set<Block> yChain = buildYChain(startBlock, grid);
-    for (Block block : ImmutableSet.copyOf(yChain)) {
-      if (block.getY() == 0) {
-        yChain.remove(block);
+
+    trim(result, grid);
+    return result;
+  }
+
+  private void trim(Set<Block> result, Grid grid) {
+    for(Block block : ImmutableSet.copyOf(result)) {
+      if(buildXChain(block, grid).size() >= 3) {
+        continue;
+      }
+      if(buildYChain(block, grid).size() >= 3) {
+        continue;
+      }
+      result.remove(block);
+    }
+  }
+
+  private Set<Block> expandChain(Block startBlock, Grid grid, Set<Block> result) {
+    Block blockAbove = grid.getBlockToTheDirection(startBlock, Directions.UP);
+    if (checkBlockMatch(startBlock, blockAbove)) {
+      result.add(blockAbove);
+      expandChain(blockAbove, grid, result);
+    }
+
+    Block blockRight = grid.getBlockToTheDirection(startBlock, Directions.RIGHT);
+    if (checkBlockMatch(startBlock, blockRight)) {
+      if(!result.contains(blockRight)) {
+        result.add(blockRight);
+        expandChain(blockRight, grid, result);
       }
     }
-    if (yChain.size() >= 3) {
-      result.addAll(yChain);
+
+    Block blockLeft = grid.getBlockToTheDirection(startBlock, Directions.LEFT);
+    if (checkBlockMatch(startBlock, blockLeft)) {
+      if(!result.contains(blockLeft)) {
+        result.add(blockLeft);
+        expandChain(blockLeft, grid, result);
+      }
     }
+
     return result;
+  }
+
+  private boolean checkBlockMatch(Block startBlock, Block otherBlock) {
+    return otherBlock != null && startBlock.getShape().equals(otherBlock.getShape()) &&
+      BlockState.IDLE.equals(otherBlock.getBlockState()) && !otherBlock.getShape().equals(Shape.GREY);
   }
 
   public Set<Block> buildXChain(Block startBlock, Grid grid) {

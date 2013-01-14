@@ -15,14 +15,14 @@ public class ShapeGenerator {
   private static final Random random = new Random(System.currentTimeMillis() * 100);
 
   public Shape get() {
-    int i = random.nextInt(Shape.values().length);
+    int i = random.nextInt(Shape.values().length - 1);
     return Shape.values()[i];
   }
 
   public Shape get(Set<Shape> avoid) {
-    Shape shape = Shape.values()[random.nextInt(Shape.values().length)];
-    while(avoid.contains(shape)) {
-      shape = Shape.values()[random.nextInt(Shape.values().length)];
+    Shape shape = Shape.values()[random.nextInt(Shape.values().length - 1)];
+    while (avoid.contains(shape)) {
+      shape = Shape.values()[random.nextInt(Shape.values().length - 1)];
     }
     return shape;
   }

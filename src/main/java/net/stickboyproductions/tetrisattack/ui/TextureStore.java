@@ -35,6 +35,7 @@ public class TextureStore {
     textureNames.add("cyan");
     textureNames.add("selected");
     textureNames.add("cell");
+    textureNames.add("grey");
   }
 
   public TextureStore() {

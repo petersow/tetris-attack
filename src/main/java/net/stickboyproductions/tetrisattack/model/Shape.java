@@ -8,5 +8,9 @@ package net.stickboyproductions.tetrisattack.model;
  * Time: 22:28
  */
 public enum Shape {
-  RED, BLUE, GREEN, CYAN, MAGENTA, YELLOW
+  RED, BLUE, GREEN, CYAN, MAGENTA, YELLOW, GREY;
+
+  public static Shape create(String name) {
+    return Shape.valueOf(name.toUpperCase());
+  }
 }

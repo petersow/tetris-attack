@@ -30,6 +30,8 @@ public class ShapeSwap implements TimeTickingAction {
   @Override
   public void tick(long timeElapsed) {
     if (timeElapsed >= nextStep) {
+      System.out.println("left - " + leftBlock.getShape());
+      System.out.println("right - " +rightBlock.getShape());
       leftBlock.incrementShapeOffsetX(OFFSET_STEP);
       rightBlock.incrementShapeOffsetX(-OFFSET_STEP);
       nextStep = nextStep + SHAPE_SWAP_STEP_MS;
@@ -38,6 +40,8 @@ public class ShapeSwap implements TimeTickingAction {
 
   @Override
   public boolean isFinished() {
+    System.out.println("left - " + leftBlock.getShape());
+    System.out.println("right - " +rightBlock.getShape());
     return nextStep > SHAPE_SWAP_MS;
   }
 

@@ -94,7 +94,6 @@ public class GridMoveUp implements TimeTickingAction {
   public void pause() {
     if(!isPaused()) {
       timeToNextFire = nextFire - timeElapsed;
-      System.out.println("timeToNextFire - " + timeToNextFire);
       nextFire = Integer.MAX_VALUE;
     }
     cellsPausing++;

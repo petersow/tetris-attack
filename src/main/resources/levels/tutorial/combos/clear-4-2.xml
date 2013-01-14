@@ -1,0 +1,22 @@
+<level name="clear-4-2">
+    <blocks>
+        <!-- the grey support -->
+        <block x="0" y="1" shape="grey"/>
+        <block x="5" y="1" shape="grey"/>
+        <block x="0" y="2" shape="grey"/>
+        <block x="1" y="2" shape="grey"/>
+        <block x="3" y="2" shape="grey"/>
+        <block x="4" y="2" shape="grey"/>
+        <block x="5" y="2" shape="grey"/>
+        <block x="0" y="3" shape="grey"/>
+        <block x="3" y="3" shape="grey"/>
+        <block x="4" y="3" shape="grey"/>
+        <block x="5" y="3" shape="grey"/>
+
+        <!-- the red tutorial -->
+        <block x="1" y="1" shape="green"/>
+        <block x="3" y="1" shape="green"/>
+        <block x="4" y="1" shape="green"/>
+        <block x="1" y="3" shape="green"/>
+    </blocks>
+</level>

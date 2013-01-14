@@ -54,7 +54,7 @@ public class Block implements Drawable {
 
   public boolean canFall() {
     Block blockBelow = grid.getBlockToTheDirection(this, Directions.DOWN);
-    if (blockBelow == null) {
+    if (blockBelow == null || blockBelow.getY() == 0) {
       return false;
     }
     if ((blockBelow.getBlockState().equals(BlockState.EMPTY) ||
@@ -133,5 +133,10 @@ public class Block implements Drawable {
 
   public void setY(int y) {
     this.y = y;
+  }
+
+  public void init(Shape shape) {
+    this.shape = shape;
+    setBlockState(BlockState.IDLE);
   }
 }

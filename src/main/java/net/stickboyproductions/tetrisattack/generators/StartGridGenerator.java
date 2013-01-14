@@ -52,8 +52,7 @@ public class StartGridGenerator {
     shapesToAvoid.addAll(checkLeftAndRight(grid, block));
     shapesToAvoid.addAll(checkAboveAndBelow(grid, block));
 
-    block.setBlockState(BlockState.IDLE);
-    block.setShape(shapeGenerator.get(shapesToAvoid));
+    block.init(shapeGenerator.get(shapesToAvoid));
   }
 
   private ImmutableSet<Shape> checkLeftAndRight(Grid grid, Block block) {

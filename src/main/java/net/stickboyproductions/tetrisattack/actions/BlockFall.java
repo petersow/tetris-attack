@@ -33,27 +33,30 @@ public class BlockFall implements TimeTickingAction {
 
   @Override
   public void tick(long timeElapsed) {
+    System.out.println(block.getShape() + " " + timeElapsed + ", " + nextFall);
+    System.out.println(timeElapsed);
     if (timeElapsed >= nextFall) {
-      System.out.println("falling at " + timeElapsed);
       block.setBlockState(BlockState.FALLING);
       Block blockBelow = grid.getBlockToTheDirection(block, Directions.DOWN);
-      System.out.println(blockBelow.getOffsetY());
       if (!blockBelow.getBlockState().equals(BlockState.PAUSED_BEFORE_FALLING)) {
+        System.out.println("Moving [" + block.getShape() + "] - from (" + block.getX() + ", " + block.getY() + ")");
+        System.out.println(blockBelow.getShape() + " " + blockBelow.getBlockState());
         blockBelow.setShape(block.getShape());
 
+        block.setBlockState(BlockState.EMPTY);
+        block = blockBelow;
+        System.out.println("\tto (" + block.getX() + ", " + block.getY()+ ")");
         if (blockBelow.canFall()) {
-          System.out.println("Moving - " + block.getX() + ", " + block.getY());
-          System.out.println(blockBelow.getBlockState());
           blockBelow.setBlockState(BlockState.FALLING);
         } else {
           finished = true;
-          System.out.println("Stopping - " + block.getX() + ", " + block.getY());
+          System.out.println("Stopping [" + block.getShape() + "] - " + block.getX() + ", " + block.getY());
           blockBelow.setBlockState(BlockState.IDLE);
         }
-        block.setBlockState(BlockState.EMPTY);
-        block = blockBelow;
+        nextFall = nextFall + FALL_BLOCK_MS;
+      } else {
+        block.setBlockState(BlockState.PAUSED_BEFORE_FALLING);
       }
-      nextFall = nextFall + FALL_BLOCK_MS;
     }
   }
 

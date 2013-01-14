@@ -9,7 +9,7 @@ import static net.stickboyproductions.tetrisattack.constants.GameConfig.BLOCKS_I
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.ROWS_IN_GRID;
 
 /**
- * The holder of Blocks for a game.
+ * The holder of Level for a game.
  * <p/>
  * User: Pete
  * Date: 27/11/12

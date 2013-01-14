@@ -1,0 +1,9 @@
+<level name="1-1">
+    <blocks>
+        <block x="1" y="1" shape="red"/>
+        <block x="3" y="1" shape="red"/>
+        <block x="4" y="1" shape="red"/>
+    </blocks>
+</level>
+
+

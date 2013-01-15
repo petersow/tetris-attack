@@ -4,6 +4,7 @@ import net.stickboyproductions.tetrisattack.constants.Directions;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
 import net.stickboyproductions.tetrisattack.model.Block;
+import net.stickboyproductions.tetrisattack.model.Game;
 import net.stickboyproductions.tetrisattack.model.Grid;
 
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.DEBUG;
@@ -21,37 +22,35 @@ public class BlockFall implements TimeTickingAction {
   private Grid grid;
   private int nextFall = FALL_PAUSE_MS;
   private boolean finished;
+  private Game game;
+  private int chainNum;
 
-  public BlockFall(Block block, Grid grid) {
+  public BlockFall(Block block, Game game, int chainNum) {
+    this.game = game;
+    this.chainNum = chainNum;
     if (DEBUG) {
       System.out.println("Making a Block Fall containing");
       System.out.println("x=" + block.getX() + ", y=" + block.getY());
     }
     this.block = block;
-    this.grid = grid;
+    this.grid = game.getGrid();
   }
 
   @Override
   public void tick(long timeElapsed) {
-    System.out.println(block.getShape() + " " + timeElapsed + ", " + nextFall);
-    System.out.println(timeElapsed);
     if (timeElapsed >= nextFall) {
       block.setBlockState(BlockState.FALLING);
       Block blockBelow = grid.getBlockToTheDirection(block, Directions.DOWN);
       if (!blockBelow.getBlockState().equals(BlockState.PAUSED_BEFORE_FALLING)) {
-        System.out.println("Moving [" + block.getShape() + "] - from (" + block.getX() + ", " + block.getY() + ")");
-        System.out.println(blockBelow.getShape() + " " + blockBelow.getBlockState());
         blockBelow.setShape(block.getShape());
 
         block.setBlockState(BlockState.EMPTY);
         block = blockBelow;
-        System.out.println("\tto (" + block.getX() + ", " + block.getY()+ ")");
         if (blockBelow.canFall()) {
           blockBelow.setBlockState(BlockState.FALLING);
         } else {
           finished = true;
-          System.out.println("Stopping [" + block.getShape() + "] - " + block.getX() + ", " + block.getY());
-          blockBelow.setBlockState(BlockState.IDLE);
+          blockBelow.setBlockState(BlockState.RESERVED);
         }
         nextFall = nextFall + FALL_BLOCK_MS;
       } else {
@@ -74,5 +73,7 @@ public class BlockFall implements TimeTickingAction {
 
   @Override
   public void end() {
+    block.setBlockState(BlockState.IDLE);
+    game.setChainFinished(chainNum);
   }
 }

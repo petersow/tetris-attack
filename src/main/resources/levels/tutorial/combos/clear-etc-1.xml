@@ -1,0 +1,39 @@
+<level name="etc-2">
+    <blocks>
+        <!-- the grey support -->
+        <block x="0" y="1" shape="grey"/>
+        <block x="1" y="1" shape="grey"/>
+        <block x="4" y="1" shape="grey"/>
+        <block x="5" y="1" shape="grey"/>
+        <block x="0" y="2" shape="grey"/>
+        <block x="1" y="2" shape="grey"/>
+        <block x="4" y="2" shape="grey"/>
+        <block x="5" y="2" shape="grey"/>
+        <block x="0" y="4" shape="grey"/>
+        <block x="1" y="4" shape="grey"/>
+        <block x="4" y="4" shape="grey"/>
+        <block x="5" y="4" shape="grey"/>
+        <block x="0" y="5" shape="grey"/>
+        <block x="1" y="5" shape="grey"/>
+        <block x="4" y="5" shape="grey"/>
+        <block x="5" y="5" shape="grey"/>
+
+        <!-- the green tutorial -->
+        <block x="3" y="1" shape="green"/>
+        <block x="3" y="2" shape="green"/>
+        <block x="2" y="3" shape="green"/>
+        <block x="4" y="3" shape="green"/>
+        <block x="5" y="3" shape="green"/>
+        <block x="3" y="4" shape="green"/>
+        <block x="3" y="5" shape="green"/>
+
+        <!-- the magenta tutorial -->
+        <block x="2" y="1" shape="magenta"/>
+        <block x="2" y="2" shape="magenta"/>
+        <block x="3" y="3" shape="magenta"/>
+        <block x="0" y="3" shape="magenta"/>
+        <block x="1" y="3" shape="magenta"/>
+        <block x="2" y="4" shape="magenta"/>
+        <block x="2" y="5" shape="magenta"/>
+    </blocks>
+</level>

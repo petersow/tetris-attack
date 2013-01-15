@@ -1,0 +1,24 @@
+<level name="x3-chain-1">
+    <blocks>
+        <!-- the grey support -->
+        <block x="3" y="1" shape="grey"/>
+        <block x="4" y="1" shape="grey"/>
+        <block x="5" y="1" shape="grey"/>
+        <block x="0" y="2" shape="grey"/>
+        <block x="3" y="2" shape="grey"/>
+        <block x="5" y="2" shape="grey"/>
+
+        <!-- the red tutorial -->
+        <block x="1" y="2" shape="red"/>
+        <block x="2" y="2" shape="red"/>
+        <block x="4" y="2" shape="red"/>
+        <!-- the yellow tutorial -->
+        <block x="2" y="1" shape="yellow"/>
+        <block x="2" y="3" shape="yellow"/>
+        <block x="2" y="4" shape="yellow"/>
+        <!-- the green tutorial -->
+        <block x="0" y="1" shape="green"/>
+        <block x="1" y="1" shape="green"/>
+        <block x="2" y="5" shape="green"/>
+    </blocks>
+</level>

@@ -1,6 +1,5 @@
 package net.stickboyproductions.tetrisattack.model;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.stickboyproductions.tetrisattack.actions.*;
 import net.stickboyproductions.tetrisattack.constants.GameConfig;
@@ -16,7 +15,6 @@ import net.stickboyproductions.tetrisattack.timing.SystemClock;
 import net.stickboyproductions.tetrisattack.ui.*;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Set;
 
 import static net.stickboyproductions.tetrisattack.constants.GameConfig.BLOCKS_IN_ROW_COUNT;
@@ -46,6 +44,8 @@ public class Game extends AbstractControllable implements Drawable {
   private GridMoveUp gridMoveUp;
   private Speed speed;
   private Score score = new Score();
+
+  private int chainFinished = 0;
 
   // UI things
 
@@ -83,15 +83,14 @@ public class Game extends AbstractControllable implements Drawable {
       }
     }
 
-    try {
+//    try {
 //      levelLoader.load("puzzles/1-1.xml", grid);
-      levelLoader.load("tutorial/combos/etc-4-4.xml", grid);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      System.out.println("error loading level so loading a random one");
+//      levelLoader.load("tutorial/combos/chain-etc-4-extra.xml", grid);
+//    } catch (Exception e) {
+//      System.out.println(e.getMessage());
+//      System.out.println("error loading level so loading a random one");
       startGridGenerator.generate(grid);
-    }
-
+//    }
 
     playerSelection = new PlayerSelection(gameClock, grid, grid.get(GameConfig.PLAYER_START_X, GameConfig.PLAYER_START_Y),
       drawableRegister, inputController);
@@ -156,7 +155,7 @@ public class Game extends AbstractControllable implements Drawable {
   public void update() {
     gameClock.tick();
     if (gameState.equals(GameState.RUNNING)) {
-      Set<Block> combo = Sets.newHashSet();
+      Set<Block> comboBlocks = Sets.newHashSet();
       // Test block fall
 //    if(count >= 10) {
 //      grid.get(0, 3).setBlockState(BlockState.IDLE);
@@ -169,7 +168,7 @@ public class Game extends AbstractControllable implements Drawable {
           Block currentBlock = grid.get(x, y);
           if (currentBlock.getBlockState().equals(BlockState.IDLE)) {
             if (currentBlock.canFall()) {
-              BlockFall newBlockFall = new BlockFall(currentBlock, grid);
+              BlockFall newBlockFall = new BlockFall(currentBlock, this, chainFinished);
               gameClock.register(newBlockFall);
             } else {
               if (y > 0) {
@@ -177,14 +176,7 @@ public class Game extends AbstractControllable implements Drawable {
                 Set<Block> chain = chainBuilderProcess.buildClearableChain(currentBlock, grid);
                 if (chain.size() >= 3) {
                   System.out.println("Found a chain - " + chain.size() + " " + chain.iterator().next().getShape());
-                  combo.addAll(chain);
-                  List<BlockDestroy> blockDestroyGroup = Lists.newArrayList();
-                  for (Block next : chain) {
-                    BlockDestroy newBlockDestroy = new BlockDestroy(next, currentBlock.getDistance(next), score, gridMoveUp);
-                    blockDestroyGroup.add(newBlockDestroy);
-                  }
-                  gameClock.register(blockDestroyGroup);
-                  speed.updateBlocksCleared(chain.size());
+                  comboBlocks.addAll(chain);
                 }
               }
             }
@@ -192,13 +184,19 @@ public class Game extends AbstractControllable implements Drawable {
         }
       }
       // calculate bonus points for combo
-      if(combo.size() > 3) {
-        System.out.println("There was a combo of size [" + combo.size() + "]");
+      if (comboBlocks.size() >= 3) {
+        System.out.println("There was a combo of size [" + comboBlocks.size() + "]");
         // todo : draw on screen
-        int comboOverThree = combo.size() - 3;
+        int comboOverThree = comboBlocks.size() - 3;
         if (comboOverThree > 0) {
           score.addToScore((10 * comboOverThree) + 10);
         }
+        speed.updateBlocksCleared(comboBlocks.size());
+        Combo combo = new Combo(comboBlocks, this, chainFinished + 1);
+        gameClock.register(combo);
+      }
+      if (chainFinished != 0) {
+        chainFinished = 0;
       }
     }
   }
@@ -305,5 +303,17 @@ public class Game extends AbstractControllable implements Drawable {
 
   public Score getScore() {
     return score;
+  }
+
+  public GridMoveUp getGridMoveUp() {
+    return gridMoveUp;
+  }
+
+  public int getChainFinished() {
+    return chainFinished;
+  }
+
+  public void setChainFinished(int chainFinished) {
+    this.chainFinished = chainFinished;
   }
 }

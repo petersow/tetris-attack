@@ -83,13 +83,13 @@ public class Game extends AbstractControllable implements Drawable {
       }
     }
 
-//    try {
-//      levelLoader.load("tutorial/skillchains/time-lag-4.xml", grid);
-//    } catch (Exception e) {
-//      System.out.println(e.getMessage());
-//      System.out.println("error loading level so loading a random one");
+    try {
+      levelLoader.load("misc/match-drop.xml", grid);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      System.out.println("error loading level so loading a random one");
       startGridGenerator.generate(grid);
-//    }
+    }
 
     playerSelection = new PlayerSelection(gameClock, grid, grid.get(GameConfig.PLAYER_START_X, GameConfig.PLAYER_START_Y),
       drawableRegister, inputController);
@@ -176,6 +176,9 @@ public class Game extends AbstractControllable implements Drawable {
                 if (chain.size() >= 3) {
                   System.out.println("Found a chain - " + chain.size() + " " + chain.iterator().next().getShape());
                   comboBlocks.addAll(chain);
+                  for(Block block : chain) {
+                    block.setBlockState(BlockState.DESTROYING);
+                  }
                 }
               }
             }

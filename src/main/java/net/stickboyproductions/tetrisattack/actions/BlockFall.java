@@ -4,6 +4,7 @@ import net.stickboyproductions.tetrisattack.constants.Directions;
 import net.stickboyproductions.tetrisattack.enums.BlockState;
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
 import net.stickboyproductions.tetrisattack.model.Block;
+import net.stickboyproductions.tetrisattack.model.Chain;
 import net.stickboyproductions.tetrisattack.model.Game;
 import net.stickboyproductions.tetrisattack.model.Grid;
 
@@ -23,9 +24,9 @@ public class BlockFall implements TimeTickingAction {
   private int nextFall = FALL_PAUSE_MS;
   private boolean finished;
   private Game game;
-  private int chainNum;
+  private Chain chainNum;
 
-  public BlockFall(Block block, Game game, int chainNum) {
+  public BlockFall(Block block, Game game, Chain chainNum) {
     this.game = game;
     this.chainNum = chainNum;
     if (DEBUG) {

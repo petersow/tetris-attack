@@ -1,0 +1,44 @@
+<level name="time-lag-1">
+    <blocks>
+        <!-- the grey support -->
+        <block x="0" y="1" shape="grey"/>
+        <block x="1" y="1" shape="grey"/>
+        <block x="2" y="1" shape="grey"/>
+        <block x="4" y="1" shape="grey"/>
+        <block x="5" y="1" shape="grey"/>
+        <block x="0" y="2" shape="grey"/>
+        <block x="1" y="2" shape="grey"/>
+        <block x="2" y="2" shape="grey"/>
+        <block x="4" y="2" shape="grey"/>
+        <block x="5" y="2" shape="grey"/>
+        <block x="0" y="3" shape="grey"/>
+        <block x="2" y="3" shape="grey"/>
+        <block x="4" y="3" shape="grey"/>
+        <block x="5" y="3" shape="grey"/>
+        <block x="0" y="4" shape="grey"/>
+        <block x="2" y="4" shape="grey"/>
+        <block x="4" y="4" shape="grey"/>
+        <block x="5" y="4" shape="grey"/>
+        <block x="0" y="5" shape="grey"/>
+        <block x="3" y="5" shape="grey"/>
+        <block x="5" y="5" shape="grey"/>
+        <block x="0" y="6" shape="grey"/>
+        <block x="2" y="6" shape="grey"/>
+        <block x="4" y="6" shape="grey"/>
+        <block x="5" y="6" shape="grey"/>
+
+        <!-- the cyan tutorial -->
+        <block x="3" y="1" shape="cyan"/>
+        <block x="3" y="2" shape="cyan"/>
+        <block x="3" y="6" shape="cyan"/>
+        <block x="1" y="3" shape="cyan"/>
+        <block x="1" y="4" shape="cyan"/>
+        <block x="1" y="6" shape="cyan"/>
+        <!-- the red tutorial -->
+        <block x="1" y="5" shape="red"/>
+        <block x="2" y="5" shape="red"/>
+        <block x="3" y="3" shape="red"/>
+        <block x="3" y="4" shape="red"/>
+        <block x="4" y="5" shape="red"/>
+    </blocks>
+</level>

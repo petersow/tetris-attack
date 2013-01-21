@@ -1,5 +1,6 @@
 package net.stickboyproductions.tetrisattack.ui;
 
+import net.stickboyproductions.tetrisattack.model.Block;
 import net.stickboyproductions.tetrisattack.model.Quad;
 import net.stickboyproductions.tetrisattack.model.Shape;
 import org.lwjgl.opengl.Display;
@@ -79,6 +80,12 @@ public class Screen {
 
   public void drawText(int x, int y, String text) {
     font.drawString(x, y, text, Color.orange);
+  }
+
+  public void drawTextAtBlock(Block block, int offsetX, int offsetY, String text) {
+    Quad quad = buildQuad(block.getX(), block.getY(), offsetX, offsetY);
+    font.drawString(new Float(quad.getMiddle().getX()),
+      new Float(quad.getMiddle().getY()), text, Color.white);
   }
 
   public void drawQuad(Quad quad) {

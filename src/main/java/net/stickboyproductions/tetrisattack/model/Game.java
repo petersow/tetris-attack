@@ -45,7 +45,7 @@ public class Game extends AbstractControllable implements Drawable {
   private Speed speed;
   private Score score = new Score();
 
-  private int chainFinished = 0;
+  private Chain chainFinished;
 
   // UI things
 
@@ -85,7 +85,8 @@ public class Game extends AbstractControllable implements Drawable {
 
 //    try {
 //      levelLoader.load("puzzles/1-1.xml", grid);
-//      levelLoader.load("tutorial/combos/chain-etc-4-extra.xml", grid);
+//      levelLoader.load("tutorial/skillchains/time-lag-4.xml", grid);
+//      levelLoader.load("tutorial/combos/clear-10-4.xml", grid);
 //    } catch (Exception e) {
 //      System.out.println(e.getMessage());
 //      System.out.println("error loading level so loading a random one");
@@ -186,17 +187,23 @@ public class Game extends AbstractControllable implements Drawable {
       // calculate bonus points for combo
       if (comboBlocks.size() >= 3) {
         System.out.println("There was a combo of size [" + comboBlocks.size() + "]");
-        // todo : draw on screen
+
+        // Move to Combo object
         int comboOverThree = comboBlocks.size() - 3;
         if (comboOverThree > 0) {
           score.addToScore((10 * comboOverThree) + 10);
         }
         speed.updateBlocksCleared(comboBlocks.size());
-        Combo combo = new Combo(comboBlocks, this, chainFinished + 1);
+        Combo combo;
+        if(chainFinished != null) {
+          combo = new Combo(comboBlocks, this, gameClock, chainFinished);
+        } else {
+          combo = new Combo(comboBlocks, this, gameClock);
+        }
         gameClock.register(combo);
       }
-      if (chainFinished != 0) {
-        chainFinished = 0;
+      if (chainFinished != null) {
+        chainFinished = null;
       }
     }
   }
@@ -309,11 +316,11 @@ public class Game extends AbstractControllable implements Drawable {
     return gridMoveUp;
   }
 
-  public int getChainFinished() {
+  public Chain getChainFinished() {
     return chainFinished;
   }
 
-  public void setChainFinished(int chainFinished) {
+  public void setChainFinished(Chain chainFinished) {
     this.chainFinished = chainFinished;
   }
 }

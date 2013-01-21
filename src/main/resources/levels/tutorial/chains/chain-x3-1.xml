@@ -1,4 +1,4 @@
-<level name="x3-chain-1">
+<level name="chain-x3-1">
     <blocks>
         <!-- the grey support -->
         <block x="3" y="1" shape="grey"/>

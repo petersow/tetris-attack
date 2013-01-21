@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * A POJO to represent 4 points that make up a quad
- *
+ * <p/>
  * User: Pete
  * Date: 28/10/12
  * Time: 15:24
@@ -15,12 +15,15 @@ public class Quad {
   Point bottomRight;
   Point topRight;
   Point topLeft;
+  Point middle;
 
   public Quad(Point bottomLeft, Point bottomRight, Point topRight, Point topLeft) {
     this.bottomLeft = bottomLeft;
     this.bottomRight = bottomRight;
     this.topRight = topRight;
     this.topLeft = topLeft;
+    middle = new Point((int) (topLeft.getX() + (topRight.getX() - topLeft.getX())/2),
+      (int) (topLeft.getY() + (bottomLeft.getY() - topLeft.getY())/2));
   }
 
   public void offset(int xOffset, int yOffset) {
@@ -28,13 +31,14 @@ public class Quad {
     bottomRight.setLocation(bottomRight.getX() + xOffset, bottomRight.getY() + yOffset);
     topRight.setLocation(topRight.getX() + xOffset, topRight.getY() + yOffset);
     topLeft.setLocation(topLeft.getX() + xOffset, topLeft.getY() + yOffset);
+    middle.setLocation(middle.getX() + xOffset, middle.getY() + yOffset);
   }
 
   public Quad getWithOffset(int xOffset, int yOffset) {
-    return new Quad(new Point((int) bottomLeft.getX() + xOffset,(int) bottomLeft.getY() + yOffset),
-    new Point((int) bottomRight.getX() + xOffset, (int) bottomRight.getY() + yOffset),
-    new Point((int) topRight.getX() + xOffset, (int) topRight.getY() + yOffset),
-    new Point((int) topLeft.getX() + xOffset, (int) topLeft.getY() + yOffset));
+    return new Quad(new Point((int) bottomLeft.getX() + xOffset, (int) bottomLeft.getY() + yOffset),
+      new Point((int) bottomRight.getX() + xOffset, (int) bottomRight.getY() + yOffset),
+      new Point((int) topRight.getX() + xOffset, (int) topRight.getY() + yOffset),
+      new Point((int) topLeft.getX() + xOffset, (int) topLeft.getY() + yOffset));
   }
 
   public Point getBottomLeft() {
@@ -67,5 +71,13 @@ public class Quad {
 
   public void setTopLeft(Point topLeft) {
     this.topLeft = topLeft;
+  }
+
+  public Point getMiddle() {
+    return middle;
+  }
+
+  public void setMiddle(Point middle) {
+    this.middle = middle;
   }
 }

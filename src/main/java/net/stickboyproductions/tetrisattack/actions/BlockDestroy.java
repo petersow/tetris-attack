@@ -15,14 +15,14 @@ import static net.stickboyproductions.tetrisattack.constants.SpeedConstants.*;
 public class BlockDestroy implements TimeTickingAction {
 
   private Block block;
-  private int distanceFromOrigin;
+  private int numberInCombo;
   private Score score;
 
   private int nextFlash = BLOCK_DESTROY_FLASH_MS;
 
-  public BlockDestroy(Block block, int distanceFromOrigin, Score score) {
+  public BlockDestroy(Block block, int numberInCombo, Score score) {
     this.block = block;
-    this.distanceFromOrigin = distanceFromOrigin;
+    this.numberInCombo = numberInCombo;
     this.score = score;
   }
 
@@ -38,7 +38,7 @@ public class BlockDestroy implements TimeTickingAction {
         }
         nextFlash += BLOCK_DESTROY_FLASH_MS;
       }
-    } else if (timeElapsed <= BLOCK_DESTROY_FLASH_PHASE_MS + (BLOCK_DESTROY_CELL_MS * distanceFromOrigin)) {
+    } else if (timeElapsed <= BLOCK_DESTROY_FLASH_PHASE_MS + (BLOCK_DESTROY_CELL_MS * numberInCombo)) {
       block.setFrame(5.0);
     } else if (block.getBlockState().equals(BlockState.DESTROYING_END)) {
       // Do nothing

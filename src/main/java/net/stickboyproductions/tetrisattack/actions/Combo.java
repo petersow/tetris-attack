@@ -34,12 +34,10 @@ public class Combo implements TimeTickingAction {
     this.blockSet = blockSet;
     this.game = game;
     this.gameClock = gameClock;
-    this.chain = new Chain();
+    this.chain = new Chain(game);
   }
 
   public Combo(Set<Block> blockSet, Game game, GameClock gameClock, Chain chain) {
-    System.out.println("chain " + chain.getChainCount());
-    chain.increment();
     this.blockSet = blockSet;
     this.game = game;
     this.gameClock = gameClock;
@@ -65,8 +63,17 @@ public class Combo implements TimeTickingAction {
 
   @Override
   public void start() {
+    chain.increment();
+
+    // Add bonus points to the games score and speed
+    int comboOverThree = blockSet.size() - 3;
+    if (comboOverThree > 0) {
+      game.getScore().addToScore((10 * comboOverThree) + 10);
+    }
+    game.getSpeed().updateBlocksCleared(blockSet.size());
+
     // Create the comboNotification (if applicable)
-    if(blockSet.size() > 3) {
+    if (blockSet.size() > 3) {
       comboNotification =
         new ComboNotification(getTopLeftBlock(ImmutableList.copyOf(blockSet)), blockSet.size());
       game.getDrawableRegister().register(comboNotification);
@@ -74,11 +81,11 @@ public class Combo implements TimeTickingAction {
     }
     ArrayList<Block> blocks = Lists.newArrayList(blockSet);
     int count = 0;
-    while(blocks.size() > 0) {
+    while (blocks.size() > 0) {
       // Get the TopLeftBlock and create its falling animation
       Block topLeftBlock = getTopLeftBlock(blocks);
       // Also create the chainNotification (if applicable)
-      if(count == 0 && chain.getChainCount() > 1) {
+      if (count == 0 && chain.getChainCount() > 1) {
         chainNotification = new ChainNotification(topLeftBlock, chain.getChainCount());
         game.getDrawableRegister().register(chainNotification);
         gameClock.register(chainNotification);
@@ -113,8 +120,11 @@ public class Combo implements TimeTickingAction {
 
   @Override
   public void end() {
-    if(chainNotification != null) {
+    if (chainNotification != null) {
       game.getDrawableRegister().unregister(chainNotification);
+    }
+    if (comboNotification != null) {
+      game.getDrawableRegister().unregister(comboNotification);
     }
     for (BlockDestroy blockDestroy : blockDestroyGroup) {
       blockDestroy.end();

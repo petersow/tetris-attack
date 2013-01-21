@@ -84,9 +84,7 @@ public class Game extends AbstractControllable implements Drawable {
     }
 
 //    try {
-//      levelLoader.load("puzzles/1-1.xml", grid);
 //      levelLoader.load("tutorial/skillchains/time-lag-4.xml", grid);
-//      levelLoader.load("tutorial/combos/clear-10-4.xml", grid);
 //    } catch (Exception e) {
 //      System.out.println(e.getMessage());
 //      System.out.println("error loading level so loading a random one");
@@ -188,12 +186,6 @@ public class Game extends AbstractControllable implements Drawable {
       if (comboBlocks.size() >= 3) {
         System.out.println("There was a combo of size [" + comboBlocks.size() + "]");
 
-        // Move to Combo object
-        int comboOverThree = comboBlocks.size() - 3;
-        if (comboOverThree > 0) {
-          score.addToScore((10 * comboOverThree) + 10);
-        }
-        speed.updateBlocksCleared(comboBlocks.size());
         Combo combo;
         if(chainFinished != null) {
           combo = new Combo(comboBlocks, this, gameClock, chainFinished);
@@ -322,5 +314,9 @@ public class Game extends AbstractControllable implements Drawable {
 
   public void setChainFinished(Chain chainFinished) {
     this.chainFinished = chainFinished;
+  }
+
+  public Speed getSpeed() {
+    return speed;
   }
 }

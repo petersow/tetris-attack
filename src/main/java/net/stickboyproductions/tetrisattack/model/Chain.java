@@ -1,5 +1,7 @@
 package net.stickboyproductions.tetrisattack.model;
 
+import net.stickboyproductions.tetrisattack.constants.ChainBonusPoints;
+
 /**
  * User: Pete
  * Date: 20/01/13
@@ -7,13 +9,16 @@ package net.stickboyproductions.tetrisattack.model;
  */
 public class Chain {
 
-  private int chainCount = 1;
+  private int chainCount = 0;
+  private Game game;
 
-  public Chain() {
+  public Chain(Game game) {
+    this.game = game;
   }
 
   public void increment() {
     chainCount++;
+    game.getScore().addToScore(ChainBonusPoints.getBonusPointsValue(chainCount));
   }
 
   public int getChainCount() {

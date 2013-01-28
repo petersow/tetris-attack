@@ -26,9 +26,9 @@ public class InputController {
   private InputNotifier inputNotifier;
 
   @Inject
-  public InputController(GameClock gameClock) {
+  public InputController(GameClock gameClock, InputNotifier inputNotifier) {
     this.clock = gameClock;
-    this.inputNotifier = new InputNotifier(this);
+    this.inputNotifier = inputNotifier;
   }
 
   public void createAction(Integer keyCode, boolean spammable) {
@@ -55,6 +55,6 @@ public class InputController {
   }
 
   public void update() {
-    inputNotifier.pollInput();
+    inputNotifier.pollInput(this);
   }
 }

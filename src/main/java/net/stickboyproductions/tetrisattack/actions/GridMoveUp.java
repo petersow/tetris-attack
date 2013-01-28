@@ -85,14 +85,14 @@ public class GridMoveUp implements TimeTickingAction {
   }
 
   public void speedUp() {
-    if(!isPaused()) {
+    if (!isPaused()) {
       spedUp = true;
       nextFire = timeElapsed + 1;
     }
   }
 
   public void pause() {
-    if(!isPaused()) {
+    if (!isPaused()) {
       timeToNextFire = nextFire - timeElapsed;
       nextFire = Integer.MAX_VALUE;
     }
@@ -100,7 +100,7 @@ public class GridMoveUp implements TimeTickingAction {
   }
 
   public void resume() {
-    if(isPaused()) {
+    if (isPaused()) {
       nextFire = timeElapsed + timeToNextFire;
     }
     cellsPausing--;

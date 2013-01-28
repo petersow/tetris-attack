@@ -1,13 +1,13 @@
 <level name="5block">
     <blocks>
         <!-- the 5 match -->
-        <block x="1" y="1" shape="blue" />
-        <block x="2" y="1" shape="blue" />
-        <block x="4" y="1" shape="blue" />
-        <block x="3" y="2" shape="blue" />
-        <block x="3" y="3" shape="blue" />
+        <block x="1" y="1" shape="blue"/>
+        <block x="2" y="1" shape="blue"/>
+        <block x="4" y="1" shape="blue"/>
+        <block x="3" y="2" shape="blue"/>
+        <block x="3" y="3" shape="blue"/>
 
         <!-- support -->
-        <block x="3" y="1" shape="red" />
+        <block x="3" y="1" shape="red"/>
     </blocks>
 </level>

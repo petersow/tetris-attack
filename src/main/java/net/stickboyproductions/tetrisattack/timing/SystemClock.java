@@ -1,8 +1,5 @@
 package net.stickboyproductions.tetrisattack.timing;
 
-import net.stickboyproductions.tetrisattack.enums.GameState;
-import net.stickboyproductions.tetrisattack.model.Game;
-
 import javax.inject.Singleton;
 
 /**

@@ -22,8 +22,8 @@ public class Quad {
     this.bottomRight = bottomRight;
     this.topRight = topRight;
     this.topLeft = topLeft;
-    middle = new Point((int) (topLeft.getX() + (topRight.getX() - topLeft.getX())/2),
-      (int) (topLeft.getY() + (bottomLeft.getY() - topLeft.getY())/2));
+    middle = new Point((int) (topLeft.getX() + (topRight.getX() - topLeft.getX()) / 2),
+      (int) (topLeft.getY() + (bottomLeft.getY() - topLeft.getY()) / 2));
   }
 
   public void offset(int xOffset, int yOffset) {

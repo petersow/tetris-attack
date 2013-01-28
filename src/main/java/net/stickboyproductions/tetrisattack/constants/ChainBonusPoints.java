@@ -32,7 +32,7 @@ public final class ChainBonusPoints {
   }
 
   public static Integer getBonusPointsValue(int chainNum) {
-    if(chainNum > MAX_CHAIN_SIZE) {
+    if (chainNum > MAX_CHAIN_SIZE) {
       return POINTS_MAP.get(MAX_CHAIN_SIZE);
     }
     return POINTS_MAP.get(chainNum);

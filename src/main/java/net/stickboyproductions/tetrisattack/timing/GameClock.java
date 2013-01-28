@@ -4,9 +4,9 @@ import javax.inject.Singleton;
 
 /**
  * A clock to record the time of an individual game
- *
+ * <p/>
  * Will be setup on the start of a game and can be paused.
- *
+ * <p/>
  * User: Pete
  * Date: 02/01/13
  * Time: 20:59
@@ -28,7 +28,7 @@ public class GameClock extends SystemClock {
   @Override
   protected long getTime() {
     int delta = getDelta();
-    if(!paused) {
+    if (!paused) {
       gameTimeInMs += delta;
     }
     return gameTimeInMs;

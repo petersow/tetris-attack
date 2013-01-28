@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Wrapper object to represent the score of the game round
- *
+ * <p/>
  * User: Pete
  * Date: 26/11/12
  * Time: 22:26
@@ -139,9 +139,9 @@ public class Speed {
 
   public void updateBlocksCleared(int size) {
     blockCleared += size;
-    if(blockCleared >= nextSpeedUp) {
+    if (blockCleared >= nextSpeedUp) {
       speed++;
-      if(speed +1 < MAX_SPEED) {
+      if (speed + 1 < MAX_SPEED) {
         nextSpeedUp += blocksTillNextLevel.get(speed + 1);
       } else {
         // Never level up again

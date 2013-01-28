@@ -27,7 +27,7 @@ public class ChainNotification implements Drawable, TimeTickingAction {
 
   @Override
   public void draw(Screen screen) {
-    if(!finished) {
+    if (!finished) {
       screen.drawTextAtBlock(source,
         source.getOffsetX() + offsetX, source.getOffsetY() + offsetY, "x" + chainNum);
     }
@@ -36,7 +36,7 @@ public class ChainNotification implements Drawable, TimeTickingAction {
   @Override
   public void tick(long timeElapsed) {
     offsetY += Y_OFFSET_STEP;
-    if(timeElapsed >= TIME_TO_END) {
+    if (timeElapsed >= TIME_TO_END) {
       finished = true;
     }
   }

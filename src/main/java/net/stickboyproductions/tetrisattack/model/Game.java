@@ -83,13 +83,13 @@ public class Game extends AbstractControllable implements Drawable {
       }
     }
 
-    try {
-      levelLoader.load("misc/match-drop.xml", grid);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      System.out.println("error loading level so loading a random one");
-      startGridGenerator.generate(grid);
-    }
+//    try {
+//      levelLoader.load("misc/match-drop.xml", grid);
+//    } catch (Exception e) {
+//      System.out.println(e.getMessage());
+//      System.out.println("error loading level so loading a random one");
+    startGridGenerator.generate(grid);
+//    }
 
     playerSelection = new PlayerSelection(gameClock, grid, grid.get(GameConfig.PLAYER_START_X, GameConfig.PLAYER_START_Y),
       drawableRegister, inputController);
@@ -176,7 +176,7 @@ public class Game extends AbstractControllable implements Drawable {
                 if (chain.size() >= 3) {
                   System.out.println("Found a chain - " + chain.size() + " " + chain.iterator().next().getShape());
                   comboBlocks.addAll(chain);
-                  for(Block block : chain) {
+                  for (Block block : chain) {
                     block.setBlockState(BlockState.DESTROYING);
                   }
                 }
@@ -190,7 +190,7 @@ public class Game extends AbstractControllable implements Drawable {
         System.out.println("There was a combo of size [" + comboBlocks.size() + "]");
 
         Combo combo;
-        if(chainFinished != null) {
+        if (chainFinished != null) {
           combo = new Combo(comboBlocks, this, gameClock, chainFinished);
         } else {
           combo = new Combo(comboBlocks, this, gameClock);

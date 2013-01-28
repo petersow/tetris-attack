@@ -20,7 +20,7 @@ public class LevelLoaderProcess {
     Level level =
       levelParser.parse(LevelLoaderProcess.class.getResourceAsStream("/levels/" + levelName));
 
-    for(LevelBlock levelBlock : level.getBlocks()) {
+    for (LevelBlock levelBlock : level.getBlocks()) {
       outputGrid.get(levelBlock.getX(), levelBlock.getY()).init(Shape.create(levelBlock.getShapeName()));
     }
   }

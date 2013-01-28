@@ -2,12 +2,9 @@ package net.stickboyproductions.tetrisattack.timing;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.stickboyproductions.tetrisattack.enums.GameState;
 import net.stickboyproductions.tetrisattack.interfaces.TimeDelayedAction;
 import net.stickboyproductions.tetrisattack.interfaces.TimeTickingAction;
-import net.stickboyproductions.tetrisattack.model.Game;
 
-import javax.inject.Singleton;
 import java.util.List;
 
 /**
@@ -154,14 +151,14 @@ public abstract class AbstractClock {
     }
 
     public void start() {
-      for(TimeTickingAction action : actions) {
+      for (TimeTickingAction action : actions) {
         action.start();
       }
     }
 
     public boolean isFinished() {
-      for(TimeTickingAction action : actions) {
-        if(!action.isFinished()) {
+      for (TimeTickingAction action : actions) {
+        if (!action.isFinished()) {
           return false;
         }
       }
@@ -169,13 +166,13 @@ public abstract class AbstractClock {
     }
 
     public void end() {
-      for(TimeTickingAction action : actions) {
+      for (TimeTickingAction action : actions) {
         action.end();
       }
     }
 
     public void tick(long timeElapsed) {
-      for(TimeTickingAction action : actions) {
+      for (TimeTickingAction action : actions) {
         action.tick(timeElapsed);
       }
     }

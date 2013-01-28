@@ -24,7 +24,7 @@ public class DrawableRegister {
   }
 
   public void draw() {
-    for(Drawable drawable : drawables) {
+    for (Drawable drawable : drawables) {
       drawable.draw(screen);
     }
   }

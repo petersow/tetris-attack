@@ -1,16 +1,16 @@
 <level name="tblock">
     <blocks>
         <!-- the t block setup -->
-        <block x="2" y="1" shape="blue" />
-        <block x="2" y="2" shape="blue" />
-        <block x="1" y="3" shape="blue" />
-        <block x="3" y="3" shape="blue" />
-        <block x="3" y="4" shape="blue" />
+        <block x="2" y="1" shape="blue"/>
+        <block x="2" y="2" shape="blue"/>
+        <block x="1" y="3" shape="blue"/>
+        <block x="3" y="3" shape="blue"/>
+        <block x="3" y="4" shape="blue"/>
 
         <!-- support -->
-        <block x="1" y="1" shape="red" />
-        <block x="3" y="1" shape="red" />
-        <block x="1" y="2" shape="cyan" />
-        <block x="3" y="2" shape="cyan" />
+        <block x="1" y="1" shape="red"/>
+        <block x="3" y="1" shape="red"/>
+        <block x="1" y="2" shape="cyan"/>
+        <block x="3" y="2" shape="cyan"/>
     </blocks>
 </level>

@@ -1,14 +1,11 @@
 package net.stickboyproductions.tetrisattack;
 
 import net.stickboyproductions.tetrisattack.io.InputController;
-import net.stickboyproductions.tetrisattack.io.InputNotifier;
 import net.stickboyproductions.tetrisattack.model.Game;
 import net.stickboyproductions.tetrisattack.model.Grid;
 import net.stickboyproductions.tetrisattack.timing.SystemClock;
 import net.stickboyproductions.tetrisattack.ui.DrawableRegister;
 import net.stickboyproductions.tetrisattack.ui.Screen;
-import net.stickboyproductions.tetrisattack.ui.TextureStore;
-import org.lwjgl.opengl.Display;
 
 import javax.inject.Inject;
 
@@ -22,7 +19,6 @@ public class Runner {
 
   private InputController inputController;
   private Screen screen;
-  private TextureStore textureStore;
   private SystemClock clock;
   private DrawableRegister drawableRegister;
 
@@ -31,12 +27,10 @@ public class Runner {
 
   @Inject
   public Runner(InputController inputController, Screen screen,
-                TextureStore textureStore,
                 SystemClock clock, DrawableRegister drawableRegister,
                 Grid grid, Game game) {
     this.inputController = inputController;
     this.screen = screen;
-    this.textureStore = textureStore;
     this.clock = clock;
     this.drawableRegister = drawableRegister;
     this.grid = grid;
@@ -45,7 +39,6 @@ public class Runner {
 
   public void init() throws Exception {
     screen.create();
-    textureStore.init();
 //    grid.init();
     game.init();
 
@@ -53,7 +46,7 @@ public class Runner {
   }
 
   public void run() throws Exception {
-    while (!Display.isCloseRequested()) {
+    while (!screen.isCloseRequested()) {
       // Clear the screen before we redraw things
       screen.clear();
       // Check any user input

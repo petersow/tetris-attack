@@ -2,7 +2,7 @@ package net.stickboyproductions.tetrisattack.model;
 
 /**
  * Wrapper object to represent the score of the game round
- *
+ * <p/>
  * User: Pete
  * Date: 26/11/12
  * Time: 22:26

@@ -31,11 +31,11 @@ public class ChainBuilderProcess {
   }
 
   private void trim(Set<Block> result, Grid grid) {
-    for(Block block : ImmutableSet.copyOf(result)) {
-      if(buildXChain(block, grid).size() >= 3) {
+    for (Block block : ImmutableSet.copyOf(result)) {
+      if (buildXChain(block, grid).size() >= 3) {
         continue;
       }
-      if(buildYChain(block, grid).size() >= 3) {
+      if (buildYChain(block, grid).size() >= 3) {
         continue;
       }
       result.remove(block);
@@ -44,25 +44,23 @@ public class ChainBuilderProcess {
 
   private Set<Block> expandChain(Block startBlock, Grid grid, Set<Block> result) {
     Block blockAbove = grid.getBlockToTheDirection(startBlock, Directions.UP);
-    if (checkBlockMatch(startBlock, blockAbove)) {
+    if (checkBlockMatch(startBlock, blockAbove) && !blockAbove.canFall()) {
       result.add(blockAbove);
       expandChain(blockAbove, grid, result);
     }
 
     Block blockRight = grid.getBlockToTheDirection(startBlock, Directions.RIGHT);
-    if (checkBlockMatch(startBlock, blockRight)) {
-      if(!result.contains(blockRight)) {
-        result.add(blockRight);
-        expandChain(blockRight, grid, result);
-      }
+    if (checkBlockMatch(startBlock, blockRight) && !blockRight.canFall()
+      && !result.contains(blockRight)) {
+      result.add(blockRight);
+      expandChain(blockRight, grid, result);
     }
 
     Block blockLeft = grid.getBlockToTheDirection(startBlock, Directions.LEFT);
-    if (checkBlockMatch(startBlock, blockLeft)) {
-      if(!result.contains(blockLeft)) {
-        result.add(blockLeft);
-        expandChain(blockLeft, grid, result);
-      }
+    if (checkBlockMatch(startBlock, blockLeft) && !blockLeft.canFall()
+      && !result.contains(blockLeft)) {
+      result.add(blockLeft);
+      expandChain(blockLeft, grid, result);
     }
 
     return result;
